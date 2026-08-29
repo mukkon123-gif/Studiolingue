@@ -1171,15 +1171,16 @@ async function renderLangPage(code){
       </div>
     </div>
 
+    ${code!=='zh' ? `
     <div class="card">
-      <h2>Pratica di scrittura <span class="n">traccia ogni ${code==='zh'?'suono':'lettera'} seguendo il tratteggio</span></h2>
+      <h2>Pratica di scrittura <span class="n">traccia ogni lettera seguendo il tratteggio</span></h2>
       <div class="empty-state" style="background:#F7F4EC;border-radius:10px;padding:12px 14px;margin-bottom:14px;color:var(--text);">
         La freccia colorata sovrapposta a ogni carattere indica la direzione generale del tratto; il testo sotto spiega come si costruisce la lettera nel dettaglio. Ricalca la forma tratteggiata su carta, seguendo le righe/quadretti guida.
       </div>
       <div class="trace-grid">
         ${ALPHABETS[code].map((entry,idx)=>tracingTile(entry, code, conf.accent, idx, 'new')).join('')}
       </div>
-    </div>
+    </div>` : ''}
 
     ${code==='zh' ? `
     <div class="card">
