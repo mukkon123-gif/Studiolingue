@@ -246,8 +246,7 @@
   .login-error{color:#B23A2E;font-size:12.5px;margin-top:10px;min-height:16px;}
   .user-chip{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin:4px 0 12px 0;background:var(--ink-light);border-radius:8px;}
   .user-chip span{font-size:11.5px;color:#B9BECC;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px;}
-  .user-chip button{background:none;border:none;color:#8A8F9E;font-size:11px;text-decoration:underline;padding:0;}  .zh-hero{width:100%;border-radius:14px;overflow:hidden;margin-bottom:22px;border:1px solid var(--hairline);background:#FBF3E9;}
-  .zh-hero svg{width:100%;height:auto;display:block;}
+  .user-chip button{background:none;border:none;color:#8A8F9E;font-size:11px;text-decoration:underline;padding:0;}
 </style>
 </head>
 <body>
@@ -1162,8 +1161,6 @@ async function renderLangPage(code){
       <p>Vocabolario, regole grammaticali e sessioni di studio per il ${conf.name.toLowerCase()}.</p>
     </div>
 
-    ${code==='zh' ? chineseHeroBanner() : ''}
-
     <div class="summary-bar">
       <div class="stat"><div class="num mono">${data.words.length}</div><div class="lbl">Parole conosciute</div></div>
       <div class="stat"><div class="num mono">${data.grammar.length}</div><div class="lbl">Regole grammaticali</div></div>
@@ -1660,76 +1657,6 @@ async function transcribeImage(file, onProgress){
   }
   const { data } = await ocrWorker.recognize(file);
   return (data.text||'').trim();
-}
-
-/* ---------------------------------------------------------------
-   FUNZIONE BANNER CINESE (AGGIUNTA)
---------------------------------------------------------------- */
-function chineseHeroBanner(){
-  return `
-  <div class="zh-hero">
-    <svg viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg">
-      <rect x="0" y="0" width="900" height="250" fill="#FBF3E9"/>
-      <g transform="translate(55,55)">
-        <rect x="0" y="0" width="15" height="150" rx="7" fill="#6FA84B"/>
-        <rect x="0" y="36" width="15" height="4" fill="#4F7E36"/>
-        <rect x="0" y="80" width="15" height="4" fill="#4F7E36"/>
-        <rect x="0" y="120" width="15" height="4" fill="#4F7E36"/>
-        <rect x="30" y="22" width="15" height="150" rx="7" fill="#83BE5E"/>
-        <rect x="30" y="60" width="15" height="4" fill="#5D9142"/>
-        <rect x="30" y="104" width="15" height="4" fill="#5D9142"/>
-        <rect x="30" y="148" width="15" height="4" fill="#5D9142"/>
-        <path d="M15,28 Q42,10 58,30 Q36,28 15,28 Z" fill="#8FCB63"/>
-        <path d="M45,58 Q74,42 88,60 Q64,58 45,58 Z" fill="#8FCB63"/>
-        <path d="M-4,95 Q-30,84 -34,102 Q-14,102 -4,95 Z" fill="#8FCB63"/>
-      </g>
-      <g transform="translate(215,80)">
-        <ellipse cx="62" cy="112" rx="56" ry="46" fill="#FDFDFB" stroke="#232323" stroke-width="3"/>
-        <ellipse cx="24" cy="122" rx="15" ry="22" fill="#232323"/>
-        <ellipse cx="100" cy="122" rx="15" ry="22" fill="#232323"/>
-        <circle cx="62" cy="46" r="40" fill="#FDFDFB" stroke="#232323" stroke-width="3"/>
-        <circle cx="30" cy="14" r="14" fill="#232323"/>
-        <circle cx="94" cy="14" r="14" fill="#232323"/>
-        <ellipse cx="40" cy="46" rx="13" ry="16" fill="#232323"/>
-        <ellipse cx="84" cy="46" rx="13" ry="16" fill="#232323"/>
-        <circle cx="42" cy="48" r="4" fill="#fff"/>
-        <circle cx="86" cy="48" r="4" fill="#fff"/>
-        <ellipse cx="62" cy="63" rx="7" ry="5" fill="#232323"/>
-        <path d="M50,52 Q40,20 60,60 Q68,18 78,50" fill="#7FBB5C" opacity=".9"/>
-      </g>
-      <g transform="translate(400,18)">
-        <line x1="26" y1="0" x2="26" y2="12" stroke="#8A6D3B" stroke-width="3"/>
-        <rect x="10" y="12" width="32" height="9" rx="3" fill="#D9AE35"/>
-        <path d="M10,21 Q6,64 26,74 Q46,64 42,21 Z" fill="#C0392B"/>
-        <line x1="11" y1="40" x2="41" y2="40" stroke="#8A1F18" stroke-width="1.4" opacity=".45"/>
-        <line x1="11" y1="55" x2="41" y2="55" stroke="#8A1F18" stroke-width="1.4" opacity=".45"/>
-        <rect x="10" y="74" width="32" height="8" rx="3" fill="#D9AE35"/>
-        <line x1="26" y1="82" x2="26" y2="98" stroke="#D9AE35" stroke-width="2"/>
-        <path d="M18,98 Q26,112 34,98" stroke="#D9AE35" stroke-width="2" fill="none"/>
-      </g>
-      <g transform="translate(500,150)">
-        <ellipse cx="30" cy="46" rx="34" ry="8" fill="#DDE7EC"/>
-        <path d="M6,20 Q6,44 30,44 Q54,44 54,20 Z" fill="#EAF2F6" stroke="#7A93A3" stroke-width="2"/>
-        <path d="M54,24 Q68,24 66,34 Q64,42 52,38" fill="none" stroke="#7A93A3" stroke-width="2.5"/>
-        <path d="M14,26 L20,30 M26,24 L32,30 M38,25 L44,30" stroke="#3E6E8E" stroke-width="1.6" opacity=".7"/>
-      </g>
-      <g transform="translate(580,30)">
-        <path d="M0,150 C45,168 78,126 66,86 C54,44 108,24 150,46 C188,64 198,26 236,14"
-              fill="none" stroke="#C0392B" stroke-width="17" stroke-linecap="round"/>
-        <path d="M0,150 C45,168 78,126 66,86 C54,44 108,24 150,46 C188,64 198,26 236,14"
-              fill="none" stroke="#E3B23C" stroke-width="3" stroke-dasharray="1 11" stroke-linecap="round"/>
-        <g transform="translate(222,-2)">
-          <path d="M0,22 Q8,2 30,6 Q47,10 43,27 Q38,40 20,37 Q4,35 0,22 Z" fill="#C0392B"/>
-          <circle cx="31" cy="16" r="3" fill="#232323"/>
-          <path d="M9,2 Q15,-13 22,1" stroke="#E3B23C" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <path d="M41,22 Q57,16 60,28 Q50,32 41,28 Z" fill="#E3B23C"/>
-        </g>
-      </g>
-      <path d="M165,0 L735,0 L757,27 L735,54 L165,54 L143,27 Z" fill="#1C2B4A"/>
-      <text x="450" y="35" text-anchor="middle" font-family="'Fraunces',serif" font-size="25" font-weight="700" fill="#F4F0E6">学中文 · Impara il Cinese</text>
-      <text x="450" y="232" text-anchor="middle" font-family="'Inter',sans-serif" font-size="13.5" letter-spacing="1.2" fill="#8A8378">GRAMMATICA · VOCABOLARIO · ESPRESSIONI · PRONUNCIA E PIÙ</text>
-    </svg>
-  </div>`;
 }
 
 /* ---------------------------------------------------------------
