@@ -286,42 +286,28 @@ const FAMILIES = [
 ];
 
 /* ---------------------------------------------------------------
-   SEED WORDS AND GRAMMAR (omitted for brevity - keep your existing data)
+   SEED WORDS, GRAMMAR, NOTEBOOK, ETC (DAI DATI PRECEDENTI)
 --------------------------------------------------------------- */
-// (Keep all your existing SEED_WORDS, SEED_GRAMMAR, NOTEBOOK_INFO, SPEECH_LANG, etc. here)
+const SEED_WORDS = { /* MANTIENI I TUOI DATI */ };
+const SEED_GRAMMAR = { /* MANTIENI I TUOI DATI */ };
+const NOTEBOOK_INFO = { /* MANTIENI I TUOI DATI */ };
+const SPEECH_LANG = { ar:'ar-SA', zh:'zh-CN', el:'el-GR', de:'de-DE', es:'es-ES', fr:'fr-FR' };
+
+// ... (Tutte le altre funzioni di sintesi, direzioni e tracciamento base restano invariate) ...
 
 /* ---------------------------------------------------------------
-   GUIDED TRACE SETUP (New didactic logic)
+   GUIDED TRACE SETUP (NUOVA GUIDA DIDATTICA)
 --------------------------------------------------------------- */
 const GUIDED_TRACE = {
   zh: {
-    // Example: 人 (Person) - 2 strokes
-    "人": [
-      { path: "M60,20 L45,90", x: 60, y: 20, num: 1 },
-      { path: "M60,20 L75,90", x: 60, y: 20, num: 2 }
-    ],
-    // Example: 日 (Sun) - 4 strokes (simplified)
-    "日": [
-      { path: "M40,30 L80,30", x: 40, y: 30, num: 1 },
-      { path: "M40,30 L40,90", x: 40, y: 30, num: 2 },
-      { path: "M80,30 L80,90", x: 80, y: 30, num: 3 },
-      { path: "M40,90 L80,90", x: 40, y: 90, num: 4 }
-    ]
+    "人": [ { path: "M60,20 L45,90", x: 60, y: 20, num: 1 }, { path: "M60,20 L75,90", x: 60, y: 20, num: 2 } ],
+    "日": [ { path: "M40,30 L80,30", x: 40, y: 30, num: 1 }, { path: "M40,30 L40,90", x: 40, y: 30, num: 2 }, { path: "M80,30 L80,90", x: 80, y: 30, num: 3 }, { path: "M40,90 L80,90", x: 40, y: 90, num: 4 } ]
   },
   el: {
-    // Example: Α α (Alpha) - 3 strokes (like the letter A in the image)
-    "Α": [
-      { path: "M50,90 L40,20", x: 50, y: 90, num: 1 },
-      { path: "M40,20 L70,90", x: 40, y: 20, num: 2 },
-      { path: "M38,50 L62,50", x: 38, y: 50, num: 3 }
-    ]
+    "Α": [ { path: "M50,90 L40,20", x: 50, y: 90, num: 1 }, { path: "M40,20 L70,90", x: 40, y: 20, num: 2 }, { path: "M38,50 L62,50", x: 38, y: 50, num: 3 } ]
   },
   ar: {
-    // Example: ب (Ba) - 2 strokes (simplified)
-    "ب": [
-      { path: "M30,70 L70,70", x: 30, y: 70, num: 1 },
-      { path: "M50,70 L50,30", x: 50, y: 70, num: 2 }
-    ]
+    "ب": [ { path: "M30,70 L70,70", x: 30, y: 70, num: 1 }, { path: "M50,70 L50,30", x: 50, y: 70, num: 2 } ]
   }
 };
 
@@ -379,16 +365,9 @@ function tracingTile(entry, code, accent, idx, style){
     </div>`;
 }
 
-/* ---------------------------------------------------------------
-   Rest of your JS (keep existing functions like directionArrow, arrowGeometryInside, etc.)
---------------------------------------------------------------- */
-// Note: I omitted the massive SEED data to shorten the response, but you MUST keep all your existing data from your file (SEED_WORDS, ALPHABETS, etc.)
+// ... (RESTANTE LOGICA APP: ROUTER, SHELL, HOME, LANGPAGE, SPANISH, FRENCH, LOGIN, INIT) ...
+// Assicurati di incollare qui tutto il resto del codice dal tuo file precedente.
 
-// ... (All remaining functions like renderHome, renderLangPage, etc. remain unchanged) ...
-
-/* ---------------------------------------------------------------
-   INIT
---------------------------------------------------------------- */
 initAuthAndApp();
 </script>
 </body>
