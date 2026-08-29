@@ -157,7 +157,7 @@
   .trace-svg{width:100%;height:auto;display:block;}
   .trace-cap{font-size:13px;font-weight:600;margin-top:2px;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;}
   .trace-cap .trace-name{font-weight:400;color:var(--text-muted);font-size:11px;}
-  .trace-howto{font-size:10.5px;color:var(--text-faint);text-align:center;margin-top:4px;line-height:1.35;}
+  .trace-howto{font-size:10.5px;color:var(--text-faint);text-align:center;margin-top:4px;line-height:1.35; white-space:pre-wrap;}
 
   .grammar-item{border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;margin-bottom:9px;position:relative;}
   .grammar-item h4{margin:0 0 4px 0;font-size:14px;font-family:'Fraunces',serif;font-weight:600;}
@@ -251,14 +251,14 @@
 
 <script>
 /* ---------------------------------------------------------------
-   SUPABASE CONFIG
+   SUPABASE CONFIG — incolla qui i tuoi valori da
+   Project Settings → API nel pannello di Supabase
 --------------------------------------------------------------- */
 const SUPABASE_URL = 'https://xtnsuakzdwzhprmhdnhb.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_KVxr6ltrIYSNk4eqvjA2fg_FraZzyOh';
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 /* ---------------------------------------------------------------
-   LANGS & FAMILIES
+   CONFIG
 --------------------------------------------------------------- */
 const LANGS = {
   ar:{name:'Arabo',        glyph:'ا',  accent:'#C9A227', rtl:true,  termFont:'ar'},
@@ -283,67 +283,183 @@ const FAMILIES = [
 ];
 
 /* ---------------------------------------------------------------
-   SEED CONTENT
+   SEED CONTENT — 100 parole, 10 regole grammaticali e alfabeto
+   per ciascuna delle 4 lingue principali. Ogni voce parola è
+   [termine, traduzione italiana, famiglia, nota/traslitterazione]
 --------------------------------------------------------------- */
-const SEED_WORDS = { /* ... (Mantieni i tuoi dati originali da qui in poi) ... */ };
-
-/* ---------------------------------------------------------------
-   GUIDED TRACE (Guida Didattica per bambini)
-   Numeri, frecce e ordine dei tratti per i primi caratteri.
-   Se un carattere non è presente, usa la freccia generica.
---------------------------------------------------------------- */
-const GUIDED_TRACE = {
-  zh: {
-    "人": [
-      { path: "M60,20 L45,90", x: 60, y: 20, num: 1 },
-      { path: "M60,20 L75,90", x: 60, y: 20, num: 2 }
-    ],
-    "日": [
-      { path: "M40,30 L80,30", x: 40, y: 30, num: 1 },
-      { path: "M40,30 L40,90", x: 40, y: 30, num: 2 },
-      { path: "M80,30 L80,90", x: 80, y: 30, num: 3 },
-      { path: "M40,90 L80,90", x: 40, y: 90, num: 4 }
-    ],
-    "口": [
-      { path: "M35,30 L85,30", x: 35, y: 30, num: 1 },
-      { path: "M35,30 L35,90", x: 35, y: 30, num: 2 },
-      { path: "M35,90 L85,90", x: 35, y: 90, num: 3 },
-      { path: "M85,90 L85,30", x: 85, y: 90, num: 4 }
-    ]
-  },
-  el: {
-    "Α": [
-      { path: "M55,90 L45,20", x: 55, y: 90, num: 1 },
-      { path: "M45,20 L70,90", x: 45, y: 20, num: 2 },
-      { path: "M45,50 L65,50", x: 45, y: 50, num: 3 }
-    ],
-    "Β": [
-      { path: "M40,20 L40,90", x: 40, y: 20, num: 1 },
-      { path: "M40,20 L70,20", x: 40, y: 20, num: 2 },
-      { path: "M70,20 L70,50", x: 70, y: 20, num: 3 },
-      { path: "M40,50 L70,50", x: 40, y: 50, num: 4 },
-      { path: "M70,50 L70,90", x: 70, y: 50, num: 5 },
-      { path: "M40,90 L70,90", x: 40, y: 90, num: 6 }
-    ]
-  },
-  ar: {
-    "ب": [
-      { path: "M40,70 L80,70", x: 40, y: 70, num: 1 },
-      { path: "M60,70 L60,30", x: 60, y: 70, num: 2 }
-    ],
-    "ت": [
-      { path: "M40,70 L80,70", x: 40, y: 70, num: 1 },
-      { path: "M60,70 L60,30", x: 60, y: 70, num: 2 }
-    ]
-  }
+const SEED_WORDS = {
+ar:[
+["أنا","io","pronomi","anā"],["أنتَ","tu","pronomi","anta"],["هو","lui","pronomi","huwa"],["هي","lei","pronomi","hiya"],["نحن","noi","pronomi","naḥnu"],["أنتم","voi","pronomi","antum"],["هم","loro","pronomi","hum"],["هذا","questo","pronomi","hādhā"],["ذلك","quello","pronomi","dhālika"],["لي","mio","pronomi","lī"],
+["كان","essere","verbi","kāna (passato; il presente si omette)"],["عند","avere","verbi","ʿinda, lett. 'presso di'"],["فعل","fare","verbi","faʿala"],["ذهب","andare","verbi","dhahaba"],["جاء","venire","verbi","jāʾa"],["أراد","volere","verbi","arāda"],["استطاع","potere","verbi","istaṭāʿa"],["يجب","dovere","verbi","yajibu, forma impersonale"],["قال","dire","verbi","qāla"],["رأى","vedere","verbi","raʾā"],["عرف","sapere","verbi","ʿarafa"],["أعطى","dare","verbi","aʿṭā"],["أخذ","prendere","verbi","akhadha"],["أكل","mangiare","verbi","akala"],["شرب","bere","verbi","shariba"],
+["و","e","connettori","wa"],["أو","o","connettori","aw"],["لكن","ma","connettori","lākin"],["إذا","se","connettori","idhā"],["أيضاً","anche","connettori","ayḍan"],["مع ذلك","però","connettori","maʿa dhālika"],["إذن","quindi","connettori","idhan"],["بينما","mentre","connettori","baynamā"],
+["من","chi","interrogative","man"],["ماذا","cosa","interrogative","mādhā"],["أين","dove","interrogative","ayna"],["متى","quando","interrogative","matā"],["كيف","come","interrogative","kayfa"],["لماذا","perché","interrogative","limādhā"],["كم","quanto","interrogative","kam"],["أي","quale","interrogative","ayy"],
+["اليوم","oggi","tempo-spazio","al-yawm"],["غداً","domani","tempo-spazio","ghadan"],["أمس","ieri","tempo-spazio","ams"],["الآن","ora","tempo-spazio","al-ān"],["دائماً","sempre","tempo-spazio","dāʾiman"],["أبداً","mai","tempo-spazio","abadan"],["هنا","qui","tempo-spazio","hunā"],["هناك","là","tempo-spazio","hunāka"],["داخل","dentro","tempo-spazio","dākhil"],["خارج","fuori","tempo-spazio","khārij"],["فوق","sopra","tempo-spazio","fawqa"],["تحت","sotto","tempo-spazio","taḥta"],
+["كبير","grande","aggettivi","kabīr"],["صغير","piccolo","aggettivi","ṣaghīr"],["جيد","buono","aggettivi","jayyid"],["سيء","cattivo","aggettivi","sayyiʾ"],["جديد","nuovo","aggettivi","jadīd"],["قديم","vecchio","aggettivi","qadīm"],["حار","caldo","aggettivi","ḥārr"],["بارد","freddo","aggettivi","bārid"],["جميل","bello","aggettivi","jamīl"],["قبيح","brutto","aggettivi","qabīḥ"],["سهل","facile","aggettivi","sahl"],["صعب","difficile","aggettivi","ṣaʿb"],
+["كثير","molto","quantita","kathīr"],["قليل","poco","quantita","qalīl"],["كل","tutto","quantita","kull"],["لا شيء","niente","quantita","lā shayʾ"],["أكثر","più","quantita","akthar"],["أقل","meno","quantita","aqall"],["بعض","alcuni","quantita","baʿḍ"],["كل ","ogni","quantita","kull, anche 'ogni'"],["فقط","solo","quantita","faqaṭ"],["لا يزال","ancora","quantita","lā yazāl"],
+["ماء","acqua","sopravvivenza","māʾ"],["طعام","cibo","sopravvivenza","ṭaʿām"],["بيت","casa","sopravvivenza","bayt"],["شخص","persona","sopravvivenza","shakhṣ"],["رجل","uomo","sopravvivenza","rajul"],["امرأة","donna","sopravvivenza","imraʾa"],["طفل","bambino","sopravvivenza","ṭifl"],["يوم","giorno","sopravvivenza","yawm"],["ليلة","notte","sopravvivenza","layla"],["شارع","strada","sopravvivenza","shāriʿ"],["مال","denaro","sopravvivenza","māl"],["عمل","lavoro","sopravvivenza","ʿamal"],["عائلة","famiglia","sopravvivenza","ʿāʾila"],["صديق","amico","sopravvivenza","ṣadīq"],["مساعدة","aiuto","sopravvivenza","musāʿada"],
+["شكراً","grazie","cortesia","shukran"],["عفواً","prego","cortesia","ʿafwan"],["آسف","scusa","cortesia","āsif"],["من فضلك","per favore","cortesia","min faḍlik"],["نعم","sì","cortesia","naʿam"],["لا","no","cortesia","lā"],["مرحباً","ciao","cortesia","marḥaban"],["صباح الخير","buongiorno","cortesia","ṣabāḥ al-khayr"],["تصبح على خير","buonanotte","cortesia","tuṣbiḥ ʿalā khayr"],["أهلاً وسهلاً","benvenuto","cortesia","ahlan wa sahlan"]
+],
+zh:[
+["我","io","pronomi","wǒ"],["你","tu","pronomi","nǐ"],["他","lui","pronomi","tā"],["她","lei","pronomi","tā"],["我们","noi","pronomi","wǒmen"],["你们","voi","pronomi","nǐmen"],["他们","loro","pronomi","tāmen"],["这个","questo","pronomi","zhège"],["那个","quello","pronomi","nàge"],["我的","mio","pronomi","wǒ de"],
+["是","essere","verbi","shì"],["有","avere","verbi","yǒu"],["做","fare","verbi","zuò"],["去","andare","verbi","qù"],["来","venire","verbi","lái"],["想","volere","verbi","xiǎng"],["能","potere","verbi","néng"],["应该","dovere","verbi","yīnggāi"],["说","dire","verbi","shuō"],["看","vedere","verbi","kàn"],["知道","sapere","verbi","zhīdào"],["给","dare","verbi","gěi"],["拿","prendere","verbi","ná"],["吃","mangiare","verbi","chī"],["喝","bere","verbi","hē"],
+["和","e","connettori","hé"],["或者","o","connettori","huòzhě"],["但是","ma","connettori","dànshì"],["如果","se","connettori","rúguǒ"],["也","anche","connettori","yě"],["不过","però","connettori","búguò"],["所以","quindi","connettori","suǒyǐ"],["而","mentre","connettori","ér"],
+["谁","chi","interrogative","shéi"],["什么","cosa","interrogative","shénme"],["哪里","dove","interrogative","nǎlǐ"],["什么时候","quando","interrogative","shénme shíhou"],["怎么","come","interrogative","zěnme"],["为什么","perché","interrogative","wèishénme"],["多少","quanto","interrogative","duōshǎo"],["哪个","quale","interrogative","nǎge"],
+["今天","oggi","tempo-spazio","jīntiān"],["明天","domani","tempo-spazio","míngtiān"],["昨天","ieri","tempo-spazio","zuótiān"],["现在","ora","tempo-spazio","xiànzài"],["总是","sempre","tempo-spazio","zǒngshì"],["从不","mai","tempo-spazio","cóngbù"],["这里","qui","tempo-spazio","zhèlǐ"],["那里","là","tempo-spazio","nàlǐ"],["里面","dentro","tempo-spazio","lǐmiàn"],["外面","fuori","tempo-spazio","wàimiàn"],["上面","sopra","tempo-spazio","shàngmiàn"],["下面","sotto","tempo-spazio","xiàmiàn"],
+["大","grande","aggettivi","dà"],["小","piccolo","aggettivi","xiǎo"],["好","buono","aggettivi","hǎo"],["坏","cattivo","aggettivi","huài"],["新","nuovo","aggettivi","xīn"],["旧","vecchio","aggettivi","jiù"],["热","caldo","aggettivi","rè"],["冷","freddo","aggettivi","lěng"],["漂亮","bello","aggettivi","piàoliang"],["丑","brutto","aggettivi","chǒu"],["容易","facile","aggettivi","róngyì"],["难","difficile","aggettivi","nán"],
+["很多","molto","quantita","hěn duō"],["一点","poco","quantita","yìdiǎn"],["所有","tutto","quantita","suǒyǒu"],["没有什么","niente","quantita","méiyǒu shénme"],["更多","più","quantita","gèng duō"],["更少","meno","quantita","gèng shǎo"],["一些","alcuni","quantita","yìxiē"],["每个","ogni","quantita","měige"],["只","solo","quantita","zhǐ"],["还","ancora","quantita","hái"],
+["水","acqua","sopravvivenza","shuǐ"],["食物","cibo","sopravvivenza","shíwù"],["家","casa","sopravvivenza","jiā"],["人","persona","sopravvivenza","rén"],["男人","uomo","sopravvivenza","nánrén"],["女人","donna","sopravvivenza","nǚrén"],["孩子","bambino","sopravvivenza","háizi"],["天","giorno","sopravvivenza","tiān"],["夜晚","notte","sopravvivenza","yèwǎn"],["街","strada","sopravvivenza","jiē"],["钱","denaro","sopravvivenza","qián"],["工作","lavoro","sopravvivenza","gōngzuò"],["家庭","famiglia","sopravvivenza","jiātíng"],["朋友","amico","sopravvivenza","péngyǒu"],["帮助","aiuto","sopravvivenza","bāngzhù"],
+["谢谢","grazie","cortesia","xièxie"],["不客气","prego","cortesia","búkèqi"],["对不起","scusa","cortesia","duìbùqǐ"],["请","per favore","cortesia","qǐng"],["是的","sì","cortesia","shì de"],["不","no","cortesia","bù"],["你好","ciao","cortesia","nǐhǎo"],["早上好","buongiorno","cortesia","zǎoshang hǎo"],["晚安","buonanotte","cortesia","wǎn'ān"],["欢迎","benvenuto","cortesia","huānyíng"]
+],
+el:[
+["εγώ","io","pronomi","egó"],["εσύ","tu","pronomi","esí"],["αυτός","lui","pronomi","aftós"],["αυτή","lei","pronomi","aftí"],["εμείς","noi","pronomi","emís"],["εσείς","voi","pronomi","esís"],["αυτοί","loro","pronomi","aftí, plurale"],["αυτό","questo","pronomi","aftó"],["εκείνο","quello","pronomi","ekíno"],["δικό μου","mio","pronomi","dikó mou"],
+["είμαι","essere","verbi","íme"],["έχω","avere","verbi","ého"],["κάνω","fare","verbi","káno"],["πηγαίνω","andare","verbi","piyéno"],["έρχομαι","venire","verbi","érhome"],["θέλω","volere","verbi","thélo"],["μπορώ","potere","verbi","boró"],["πρέπει","dovere","verbi","prépi, forma impersonale"],["λέω","dire","verbi","léo"],["βλέπω","vedere","verbi","vlépo"],["ξέρω","sapere","verbi","kséro"],["δίνω","dare","verbi","díno"],["παίρνω","prendere","verbi","pérno"],["τρώω","mangiare","verbi","tróo"],["πίνω","bere","verbi","píno"],
+["και","e","connettori","ke"],["ή","o","connettori","i"],["αλλά","ma","connettori","allá"],["αν","se","connettori","an"],["επίσης","anche","connettori","epísis"],["όμως","però","connettori","ómos"],["λοιπόν","quindi","connettori","lipón"],["ενώ","mentre","connettori","enó"],
+["ποιος","chi","interrogative","piós"],["τι","cosa","interrogative","ti"],["πού","dove","interrogative","pu"],["πότε","quando","interrogative","póte"],["πώς","come","interrogative","pos"],["γιατί","perché","interrogative","yiatí"],["πόσο","quanto","interrogative","póso"],["ποιο","quale","interrogative","pio"],
+["σήμερα","oggi","tempo-spazio","símera"],["αύριο","domani","tempo-spazio","ávrio"],["χθες","ieri","tempo-spazio","chthes"],["τώρα","ora","tempo-spazio","tóra"],["πάντα","sempre","tempo-spazio","pánta"],["ποτέ","mai","tempo-spazio","poté"],["εδώ","qui","tempo-spazio","edó"],["εκεί","là","tempo-spazio","ekí"],["μέσα","dentro","tempo-spazio","mésa"],["έξω","fuori","tempo-spazio","ékso"],["πάνω","sopra","tempo-spazio","páno"],["κάτω","sotto","tempo-spazio","káto"],
+["μεγάλος","grande","aggettivi","megálos"],["μικρός","piccolo","aggettivi","mikrós"],["καλός","buono","aggettivi","kalós"],["κακός","cattivo","aggettivi","kakós"],["καινούριος","nuovo","aggettivi","kenúrios"],["παλιός","vecchio","aggettivi","paliós"],["ζεστός","caldo","aggettivi","zestós"],["κρύος","freddo","aggettivi","kríos"],["όμορφος","bello","aggettivi","ómorfos"],["άσχημος","brutto","aggettivi","áschimos"],["εύκολος","facile","aggettivi","éfkolos"],["δύσκολος","difficile","aggettivi","dhískolos"],
+["πολύ","molto","quantita","polí"],["λίγο","poco","quantita","lígo"],["όλα","tutto","quantita","óla"],["τίποτα","niente","quantita","típota"],["περισσότερο","più","quantita","perisótero"],["λιγότερο","meno","quantita","ligótero"],["μερικά","alcuni","quantita","meriká"],["κάθε","ogni","quantita","káthe"],["μόνο","solo","quantita","móno"],["ακόμα","ancora","quantita","akóma"],
+["νερό","acqua","sopravvivenza","neró"],["φαγητό","cibo","sopravvivenza","fayitó"],["σπίτι","casa","sopravvivenza","spíti"],["άτομο","persona","sopravvivenza","átomo"],["άντρας","uomo","sopravvivenza","ántras"],["γυναίκα","donna","sopravvivenza","yinéka"],["παιδί","bambino","sopravvivenza","pedí"],["μέρα","giorno","sopravvivenza","méra"],["νύχτα","notte","sopravvivenza","níchta"],["δρόμος","strada","sopravvivenza","drómos"],["χρήματα","denaro","sopravvivenza","chrímata"],["δουλειά","lavoro","sopravvivenza","dhuliá"],["οικογένεια","famiglia","sopravvivenza","ikoyénia"],["φίλος","amico","sopravvivenza","fílos"],["βοήθεια","aiuto","sopravvivenza","voítheia"],
+["ευχαριστώ","grazie","cortesia","efcharistó"],["παρακαλώ","prego","cortesia","parakaló"],["συγγνώμη","scusa","cortesia","signómi"],["σε παρακαλώ","per favore","cortesia","se parakaló"],["ναι","sì","cortesia","ne"],["όχι","no","cortesia","óchi"],["γεια","ciao","cortesia","yá"],["καλημέρα","buongiorno","cortesia","kaliméra"],["καληνύχτα","buonanotte","cortesia","kaliníchta"],["καλώς ήρθες","benvenuto","cortesia","kalós írthes"]
+],
+de:[
+["ich","io","pronomi","si legge 'ih', la ch finale è aspirata"],["du","tu","pronomi","si legge 'du'"],["er","lui","pronomi","si legge 'ea', la r finale è quasi muta"],["sie","lei","pronomi","si legge 'zi', s sonora"],["wir","noi","pronomi","si legge 'via'"],["ihr","voi","pronomi","si legge 'ia'"],["sie ","loro","pronomi","si legge 'zi', identico a 'lei', si distingue dal contesto"],["dieser","questo","pronomi","si legge 'dízer', forma maschile"],["jener","quello","pronomi","si legge 'yèner', forma maschile"],["mein","mio","pronomi","si legge 'main'"],
+["sein","essere","verbi","si legge 'zain'"],["haben","avere","verbi","si legge 'hàben'"],["machen","fare","verbi","si legge 'màchen', ch gutturale dura"],["gehen","andare","verbi","si legge 'ghèen'"],["kommen","venire","verbi","si legge 'kòmmen'"],["wollen","volere","verbi","si legge 'vòllen'"],["können","potere","verbi","si legge 'kœnnen', suono tra o ed e"],["müssen","dovere","verbi","si legge 'müssen', suono tra u ed i"],["sagen","dire","verbi","si legge 'zàgen'"],["sehen","vedere","verbi","si legge 'zèen'"],["wissen","sapere","verbi","si legge 'vìssen'"],["geben","dare","verbi","si legge 'ghèben'"],["nehmen","prendere","verbi","si legge 'nèmen'"],["essen","mangiare","verbi","si legge 'èssen'"],["trinken","bere","verbi","si legge 'trìnken'"],
+["und","e","connettori","si legge 'unt'"],["oder","o","connettori","si legge 'òder'"],["aber","ma","connettori","si legge 'àber'"],["wenn","se","connettori","si legge 'venn'"],["auch","anche","connettori","si legge 'àukh', ch gutturale dura"],["jedoch","però","connettori","si legge 'yedòkh'"],["also","quindi","connettori","si legge 'àlzo'"],["während","mentre","connettori","si legge 'vèrent'"],
+["wer","chi","interrogative","si legge 'vea'"],["was","cosa","interrogative","si legge 'vas'"],["wo","dove","interrogative","si legge 'vo'"],["wann","quando","interrogative","si legge 'vann'"],["wie","come","interrogative","si legge 'vi'"],["warum","perché","interrogative","si legge 'varùm'"],["wie viel","quanto","interrogative","si legge 'vi fil'"],["welcher","quale","interrogative","si legge 'vèlker', forma maschile"],
+["heute","oggi","tempo-spazio","si legge 'hòite'"],["morgen","domani","tempo-spazio","si legge 'mòrghen'"],["gestern","ieri","tempo-spazio","si legge 'ghèstern'"],["jetzt","ora","tempo-spazio","si legge 'yetst'"],["immer","sempre","tempo-spazio","si legge 'ìmmer'"],["nie","mai","tempo-spazio","si legge 'ni'"],["hier","qui","tempo-spazio","si legge 'hia'"],["dort","là","tempo-spazio","si legge 'dort'"],["drinnen","dentro","tempo-spazio","si legge 'drìnnen'"],["draußen","fuori","tempo-spazio","si legge 'dràussen'"],["oben","sopra","tempo-spazio","si legge 'òben'"],["unten","sotto","tempo-spazio","si legge 'ùnten'"],
+["groß","grande","aggettivi","si legge 'gros', ß=ss"],["klein","piccolo","aggettivi","si legge 'klain'"],["gut","buono","aggettivi","si legge 'gut'"],["schlecht","cattivo","aggettivi","si legge 'shlecht', sch=sh"],["neu","nuovo","aggettivi","si legge 'noi'"],["alt","vecchio","aggettivi","si legge 'alt'"],["heiß","caldo","aggettivi","si legge 'hais'"],["kalt","freddo","aggettivi","si legge 'kalt'"],["schön","bello","aggettivi","si legge 'shœn', suono tra o ed e"],["hässlich","brutto","aggettivi","si legge 'hèsslih'"],["einfach","facile","aggettivi","si legge 'àinfach'"],["schwierig","difficile","aggettivi","si legge 'shvìrig'"],
+["viel","molto","quantita","si legge 'fil'"],["wenig","poco","quantita","si legge 'vènig'"],["alles","tutto","quantita","si legge 'àlles'"],["nichts","niente","quantita","si legge 'nihts'"],["mehr","più","quantita","si legge 'mea'"],["weniger","meno","quantita","si legge 'vèniger'"],["einige","alcuni","quantita","si legge 'àinige'"],["jeder","ogni","quantita","si legge 'yèder'"],["nur","solo","quantita","si legge 'nua'"],["noch","ancora","quantita","si legge 'nokh'"],
+["Wasser","acqua","sopravvivenza","das, neutro · si legge 'vàsser'"],["Essen","cibo","sopravvivenza","das, neutro · si legge 'èssen'"],["Haus","casa","sopravvivenza","das, neutro · si legge 'haus'"],["Person","persona","sopravvivenza","die, femminile · si legge 'perzòn'"],["Mann","uomo","sopravvivenza","der, maschile · si legge 'mann'"],["Frau","donna","sopravvivenza","die, femminile · si legge 'frau'"],["Kind","bambino","sopravvivenza","das, neutro · si legge 'kint'"],["Tag","giorno","sopravvivenza","der, maschile · si legge 'tak'"],["Nacht","notte","sopravvivenza","die, femminile · si legge 'nakht'"],["Straße","strada","sopravvivenza","die, femminile · si legge 'shtràsse'"],["Geld","denaro","sopravvivenza","das, neutro · si legge 'ghelt'"],["Arbeit","lavoro","sopravvivenza","die, femminile · si legge 'àrbait'"],["Familie","famiglia","sopravvivenza","die, femminile · si legge 'famìlie'"],["Freund","amico","sopravvivenza","der, maschile · si legge 'froint'"],["Hilfe","aiuto","sopravvivenza","die, femminile · si legge 'hìlfe'"],
+["danke","grazie","cortesia","si legge 'dànke'"],["bitte","prego","cortesia","si legge 'bìtte'"],["Entschuldigung","scusa","cortesia","si legge 'entshùldigung'"],["bitte ","per favore","cortesia","si legge 'bìtte', identico a 'prego'"],["ja","sì","cortesia","si legge 'ya'"],["nein","no","cortesia","si legge 'nain'"],["hallo","ciao","cortesia","si legge 'hàllo'"],["guten Morgen","buongiorno","cortesia","si legge 'gùten mòrghen'"],["gute Nacht","buonanotte","cortesia","si legge 'gùte nakht'"],["willkommen","benvenuto","cortesia","si legge 'villkòmmen'"]
+]
 };
 
-/* ---------------------------------------------------------------
-   NUOVA FUNZIONE TRACING TILE
---------------------------------------------------------------- */
-const TRACE_FONT = { ar:"'Noto Naskh Arabic',serif", zh:"'Noto Serif SC',serif", el:"'Noto Serif',serif", de:"'Fraunces',serif" };
-const TRACE_DASH_NEW = '#C0392B';
-const TRACE_DASH_LEGACY = '#9C9384';
+const SEED_GRAMMAR = {
+ar:[
+["Scrittura da destra a sinistra","L'alfabeto arabo si scrive da destra a sinistra ed è corsivo: quasi tutte le lettere cambiano forma a seconda della posizione nella parola (iniziale, mediale, finale o isolata)."],
+["Il verbo essere al presente","Al presente il verbo 'essere' non si usa: 'Io sono felice' si dice semplicemente 'أنا سعيد' (io felice), senza alcun verbo."],
+["Genere grammaticale","I nomi sono maschili o femminili. Il femminile si forma spesso aggiungendo la lettera ة (ta marbuta) alla fine della parola."],
+["Ordine delle parole","La frase verbale classica segue l'ordine Verbo-Soggetto-Oggetto (VSO), anche se nell'arabo parlato è molto comune anche Soggetto-Verbo-Oggetto."],
+["L'articolo determinativo","L'articolo determinativo è il prefisso ال (al-), invariabile per genere e numero: الكتاب significa 'il libro'."],
+["Il duale","Oltre a singolare e plurale, l'arabo ha una forma apposita per 'due cose', ottenuta di solito aggiungendo la desinenza ان (-ān) al nome."],
+["Il plurale fratto","Molti plurali sono 'fratti', cioè irregolari: cambia lo schema interno della parola invece di aggiungere solo un suffisso, e vanno imparati uno per uno."],
+["Le vocali brevi non scritte","Nei testi normali (giornali, libri, cartelli) le vocali brevi di solito non si scrivono: si trovano scritte solo nei testi per principianti o nel Corano."],
+["La negazione","La negazione cambia a seconda del tempo verbale: لا per il presente, لم + presente per il passato, لن + presente per il futuro."],
+["Il costrutto idafa","La costruzione idafa (إضافة) esprime il possesso mettendo due nomi in sequenza senza preposizione: بيت الرجل significa 'la casa dell'uomo'."]
+],
+zh:[
+["Nessuna coniugazione verbale","Il verbo cinese resta identico per ogni persona e tempo verbale; il tempo si esprime con particelle o avverbi, ad esempio 了 (le) per un'azione completata."],
+["Ordine delle parole","L'ordine di base della frase è Soggetto-Verbo-Oggetto (SVO), proprio come in italiano."],
+["Nomi senza genere né numero","I nomi non hanno genere grammaticale né una forma diversa per singolare e plurale: 书 (libro) resta identico sia per 'un libro' sia per 'dei libri'."],
+["Le parole misuratrici","Per contare gli oggetti serve una 'parola misuratrice' (classificatore) tra il numero e il nome, ad esempio 一个人 (yí gè rén) significa 'una persona'."],
+["I toni","Il mandarino è una lingua tonale: la stessa sillaba pronunciata con toni diversi cambia completamente significato, ad esempio mā (madre) e mǎ (cavallo)."],
+["Le domande con 吗","Le domande a cui si risponde sì/no si formano spesso aggiungendo la particella 吗 (ma) alla fine di una frase affermativa, senza cambiare l'ordine delle parole."],
+["La negazione","Si nega con 不 (bù) per il presente e il futuro, e con 没 (méi) per il passato o per dire che qualcosa non è successo."],
+["Aggettivi come piccoli verbi","Gli aggettivi funzionano spesso come piccoli verbi: 我很好 (io molto bene) non richiede il verbo essere."],
+["Il possesso con 的","Il possesso si esprime con la particella 的 (de): 我的书 significa 'il mio libro'."],
+["Assenza di articoli","Non esistono articoli come 'un' o 'il': è il contesto, oppure parole come 这个 (questo) e 那个 (quello), a chiarire se si parla di qualcosa di specifico."]
+],
+el:[
+["Tre generi grammaticali","Il greco ha tre generi (maschile, femminile, neutro) e l'articolo cambia di conseguenza: ο per il maschile, η per il femminile, το per il neutro."],
+["I quattro casi","I nomi si declinano in quattro casi — nominativo, genitivo, accusativo e vocativo — che cambiano la desinenza della parola a seconda della funzione nella frase."],
+["Ordine delle parole","Grazie ai casi l'ordine delle parole è abbastanza libero, ma la forma più comune resta Soggetto-Verbo-Oggetto."],
+["Coniugazione per persona","I verbi si coniugano per persona e numero e la desinenza cambia completamente il significato: γράφω (io scrivo) diventa γράφεις (tu scrivi)."],
+["Due gruppi di verbi","Esistono due grandi gruppi di coniugazione verbale, comunemente chiamati 'verbi in -ω' e 'verbi in -ώ', con desinenze diverse."],
+["Il futuro con θα","Il futuro si forma mettendo la particella θα davanti al verbo al presente: θα πάω significa 'andrò'."],
+["La negazione","Si usa δεν per negare l'indicativo, e μη(ν) per negare l'imperativo e il congiuntivo."],
+["Accordo dell'aggettivo","Gli aggettivi concordano in genere, numero e caso con il nome che accompagnano."],
+["L'accento tonico obbligatorio","Ogni parola di più sillabe ha un accento tonico scritto obbligatorio, ad esempio καλά; senza non si legge correttamente."],
+["Le domande","Le domande si distinguono spesso solo dall'intonazione o dal segno di punteggiatura finale, che in greco è il punto e virgola ';' al posto del nostro punto interrogativo."]
+],
+de:[
+["Sostantivi con iniziale maiuscola","I nomi tedeschi si scrivono sempre con la lettera iniziale maiuscola, indipendentemente dalla posizione nella frase: Haus, Auto, Freund."],
+["Tre generi grammaticali","Esistono tre generi con articoli diversi: der (maschile), die (femminile), das (neutro), che vanno imparati a memoria insieme a ogni nome."],
+["I quattro casi","Nomi e articoli si declinano in quattro casi — nominativo, accusativo, dativo e genitivo — a seconda della funzione nella frase."],
+["Il verbo in seconda posizione","Nella frase principale il verbo coniugato occupa sempre la seconda posizione, qualunque cosa venga prima (soggetto, tempo, luogo)."],
+["Il verbo in fondo nelle subordinate","Nelle frasi secondarie, introdotte da parole come weil, dass o wenn, il verbo coniugato si sposta invece alla fine della frase."],
+["I verbi separabili","Molti verbi tedeschi sono 'separabili': il prefisso si stacca dal verbo e va alla fine della frase principale, ad esempio anrufen diventa Ich rufe dich an."],
+["Il plurale dei nomi","Non esiste un'unica regola per il plurale: cambia a seconda della parola (-e, -er, -en, -s o nessuna desinenza), spesso con l'aggiunta di un Umlaut."],
+["Le desinenze degli aggettivi","Gli aggettivi posti prima di un nome prendono una desinenza che dipende dal genere, dal caso e dall'articolo usato."],
+["Le parole composte","Il tedesco crea facilmente parole composte molto lunghe unendo più sostantivi, ad esempio Handschuh (mano+scarpa) significa 'guanto'."],
+["La negazione con nicht e kein","Si usa nicht per negare verbi, aggettivi o intere frasi, e kein per negare un sostantivo introdotto da un articolo indeterminativo, ad esempio Ich habe kein Auto."]
+]
+};
+
+const NOTEBOOK_INFO = {
+ar:"Serve un quaderno a righe: le lettere si appoggiano sulla riga di base, si scrivono da destra a sinistra e si collegano tra loro (tranne 6 lettere che non si legano mai alla successiva: ا د ذ ر ز و). Alcune lettere scendono sotto la riga.",
+zh:"Per il pinyin (le lettere qui sotto) va benissimo un quaderno a righe normale, si scrive come in italiano. Per i caratteri cinesi veri e propri serve invece un quaderno a quadretti, meglio se con la griglia 'tian zi ge' (un quadrato diviso in 4): ogni carattere occupa un riquadro e si costruisce sempre con lo stesso ordine di tratti — dall'alto in basso e da sinistra a destra, orizzontali prima dei verticali.",
+el:"Va benissimo un normale quaderno a righe, si scrive da sinistra a destra come in italiano. Presta solo attenzione alle lettere minuscole che scendono sotto la riga (β, γ, η, μ, ρ, φ, χ, ψ) e a quelle con parti che salgono sopra la riga (β, δ, θ, ζ, λ, ξ).",
+de:"Va benissimo un normale quaderno a righe, esattamente come per l'italiano: stessa direzione di scrittura, stessa altezza delle lettere."
+};
+
+const SPEECH_LANG = { ar:'ar-SA', zh:'zh-CN', el:'el-GR', de:'de-DE', es:'es-ES', fr:'fr-FR' };
+
+// ---------- SINTESI VOCALE (OTTIMIZZATA PER FIREFOX) ----------
+function speakWord(text, code) {
+    if (!('speechSynthesis' in window)) {
+        showToast('Il tuo browser non supporta la sintesi vocale.');
+        return;
+    }
+
+    const synth = window.speechSynthesis;
+
+    if (synth.speaking || synth.pending) {
+        synth.cancel();
+    }
+
+    const doSpeak = () => {
+        setTimeout(() => {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = SPEECH_LANG[code] || 'it-IT';
+            utterance.rate = 0.85;
+            utterance.pitch = 1;
+
+            const voices = synth.getVoices();
+            const langPrefix = utterance.lang.split('-')[0];
+            const preferred = voices.find(v => v.lang.startsWith(langPrefix));
+            if (preferred) utterance.voice = preferred;
+
+            utterance.onerror = (e) => {
+                console.error('Errore sintesi vocale:', e.error);
+                showToast('Voce non disponibile per questa lingua sul tuo dispositivo.');
+            };
+
+            synth.speak(utterance);
+        }, 80);
+    };
+
+    if (synth.getVoices().length === 0) {
+        const handler = () => {
+            doSpeak();
+            synth.onvoiceschanged = null;
+        };
+        synth.onvoiceschanged = handler;
+
+        setTimeout(() => {
+            if (synth.onvoiceschanged === handler) {
+                synth.onvoiceschanged = null;
+                doSpeak();
+            }
+        }, 2000);
+    } else {
+        doSpeak();
+    }
+}
+
+function speakWithBrowser(text, code) {
+    speakWord(text, code);
+}
+
+if ('speechSynthesis' in window) {
+    const synth = window.speechSynthesis;
+    const voices = synth.getVoices();
+    if (voices.length === 0) {
+        synth.onvoiceschanged = () => { synth.getVoices(); };
+    }
+}
+
+let currentAudio = null;
+let currentUtterance = null;
 
 function directionArrow(howto){
   const h = (howto||'').toLowerCase();
@@ -378,10 +494,14 @@ function arrowGeometryInside(dir, textY){
     default:      return { d:`M${left},${mid} L${right},${mid}`, sx:left, sy:mid };
   }
 }
+const TRACE_FONT = { ar:"'Noto Naskh Arabic',serif", zh:"'Noto Serif SC',serif", el:"'Noto Serif',serif", de:"'Fraunces',serif" };
+const TRACE_DASH_NEW = '#C0392B';
+const TRACE_DASH_LEGACY = '#9C9384';
 
 function tracingTile(entry, code, accent, idx, style){
   style = style || 'new';
   const [ch, name, sound, howto] = entry;
+  const arrowDir = directionArrow(howto);
   const markerId = 'arrowhead-'+code+'-'+idx;
   const isGrid = code==='zh';
   const guide = isGrid ? `
@@ -394,28 +514,25 @@ function tracingTile(entry, code, accent, idx, style){
   const textY = isGrid ? 92 : 104;
 
   let arrowSvg, dashColor;
-  const strokes = GUIDED_TRACE[code] && GUIDED_TRACE[code][ch];
-
-  if (strokes && strokes.length > 0) {
-    dashColor = TRACE_DASH_NEW;
-    arrowSvg = strokes.map(s => `
-      <path d="${s.path}" fill="none" stroke="${accent}" stroke-width="3.5" stroke-linecap="round" marker-end="url(#${markerId})"/>
-      <circle cx="${s.x}" cy="${s.y}" r="7.5" fill="#fff" stroke="${accent}" stroke-width="1.5"/>
-      <text x="${s.x}" y="${s.y+3.2}" text-anchor="middle" font-size="9.5" font-weight="700" fill="${accent}" font-family="'Inter',sans-serif">${s.num}</text>
-    `).join('');
-  } else if (style==='legacy'){
+  if(style==='legacy'){
     dashColor = TRACE_DASH_LEGACY;
-    const arrowDir = directionArrow(howto);
     const arrowD = arrowPathFor(arrowDir);
     arrowSvg = `<path d="${arrowD}" fill="none" stroke="${accent}" stroke-width="3.5" stroke-linecap="round" opacity="0.8" marker-end="url(#${markerId})"/>`;
   } else {
     dashColor = TRACE_DASH_NEW;
-    const arrowDir = directionArrow(howto);
     const {d:arrowD, sx, sy} = arrowGeometryInside(arrowDir, textY);
     arrowSvg = `
       <path d="${arrowD}" fill="none" stroke="${accent}" stroke-width="3.5" stroke-linecap="round" marker-end="url(#${markerId})"/>
       <circle cx="${sx}" cy="${sy}" r="7.5" fill="#fff" stroke="${accent}" stroke-width="1.5"/>
       <text x="${sx}" y="${sy+3.2}" text-anchor="middle" font-size="9.5" font-weight="700" fill="${accent}" font-family="'Inter',sans-serif">1</text>`;
+  }
+
+  // Formatta la descrizione in elenco numerato se contiene "1.", "2.", ecc.
+  let howtoDisplay = escapeHtml(howto);
+  if (howto.match(/\d\./)) {
+    // Sostituisce "1. ... 2. ..." con punti elenco numerati visivamente
+    howtoDisplay = howtoDisplay.replace(/(\d+)\. /g, '<span style="font-weight:600;color:#C0392B;">$1.</span> ');
+    howtoDisplay = howtoDisplay.replace(/\n/g, '<br>');
   }
 
   return `
@@ -434,12 +551,1186 @@ function tracingTile(entry, code, accent, idx, style){
         <button class="speak-btn" data-speak="${escapeHtml(ch)}" data-speak-lang="${code}" title="Ascolta">🔊</button>
       </div>
       <div style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:2px;">${escapeHtml(sound)}</div>
-      <div class="trace-howto">${escapeHtml(howto)}</div>
+      <div class="trace-howto">${howtoDisplay}</div>
     </div>`;
 }
 
-/* (INSERISCI QUI TUTTI I TUOI DATI E FUNZIONI ORIGINALI: RADICALI, PICTOGRAMS, ALPHABETS, SEED_GRAMMAR, ROUTER, LOGIN, ECC.) */
+/* ---------------------------------------------------------------
+   CINESE — radicali (部首), caratteri pittografici (象形字) e toni
+   Descrizioni dettagliate dell’ordine dei tratti
+--------------------------------------------------------------- */
+const GENERIC_ZH_HOWTO = "Ordine dei tratti cinese: orizzontali prima dei verticali, dall'alto in basso e da sinistra a destra";
 
+const RADICALS_ZH = [
+["人","rén","persona","1. Traccia il tratto obliquo che scende da destra verso sinistra (撇).\n2. Traccia il tratto obliquo che scende da sinistra verso destra (捺)."],
+["氵","shuǐ (forma radicale di 水)","acqua","1. Traccia il punto in alto a sinistra.\n2. Traccia il punto in basso a sinistra.\n3. Traccia il tratto obliquo da sinistra verso destra."],
+["木","mù","albero","1. Traccia il tratto orizzontale da sinistra a destra.\n2. Traccia il tratto verticale dall'alto verso il basso.\n3. Traccia il tratto obliquo che scende da destra verso sinistra (撇).\n4. Traccia il tratto obliquo che scende da sinistra verso destra (捺)."],
+["火","huǒ","fuoco","1. Traccia il punto sinistro in alto (da sinistra verso destra).\n2. Traccia il punto destro in alto.\n3. Traccia il tratto verticale centrale dall'alto verso il basso.\n4. Traccia il tratto obliquo inferiore."],
+["土","tǔ","terra","1. Traccia il tratto orizzontale superiore da sinistra a destra.\n2. Traccia il tratto verticale dall'alto verso il basso.\n3. Traccia il tratto orizzontale inferiore da sinistra a destra."],
+["口","kǒu","bocca","1. Traccia il tratto verticale sinistro dall'alto verso il basso.\n2. Traccia il tratto orizzontale superiore da sinistra a destra.\n3. Traccia il tratto orizzontale inferiore da sinistra a destra (chiude il lato destro)."],
+["扌","shǒu (forma radicale di 手)","mano","1. Traccia il tratto orizzontale da sinistra a destra.\n2. Traccia il tratto verticale dall'alto verso il basso.\n3. Traccia il tratto obliquo che scende da sinistra verso destra."],
+["忄","xīn (forma radicale di 心)","cuore","1. Traccia il punto sinistro (da sinistra verso destra).\n2. Traccia il punto destro.\n3. Traccia il tratto verticale centrale dall'alto verso il basso."],
+["日","rì","sole, giorno","1. Traccia il tratto verticale sinistro.\n2. Traccia il tratto orizzontale superiore.\n3. Traccia il tratto orizzontale inferiore.\n4. Traccia il tratto verticale destro."],
+["月","yuè","luna, mese","1. Traccia il tratto verticale sinistro.\n2. Traccia il tratto orizzontale superiore.\n3. Traccia il tratto orizzontale inferiore.\n4. Traccia il tratto verticale destro."],
+["女","nǚ","donna","1. Traccia il tratto obliquo da sinistra a destra.\n2. Traccia il tratto obliquo da destra a sinistra.\n3. Traccia il tratto orizzontale da sinistra a destra."],
+["子","zǐ","figlio, bambino","1. Traccia il tratto orizzontale superiore.\n2. Traccia il tratto verticale.\n3. Traccia il tratto orizzontale inferiore."],
+["大","dà","grande","1. Traccia il tratto orizzontale da sinistra a destra.\n2. Traccia il tratto obliquo che scende da destra verso sinistra (撇).\n3. Traccia il tratto obliquo che scende da sinistra verso destra (捺)."],
+["小","xiǎo","piccolo","1. Traccia il tratto verticale dall'alto verso il basso.\n2. Traccia il punto sinistro.\n3. Traccia il punto destro."],
+["山","shān","montagna","1. Traccia il tratto verticale centrale.\n2. Traccia il tratto verticale sinistro.\n3. Traccia il tratto verticale destro."],
+["田","tián","campo","1. Traccia il tratto verticale sinistro.\n2. Traccia il tratto orizzontale superiore.\n3. Traccia il tratto orizzontale inferiore.\n4. Traccia il tratto verticale destro.\n5. Traccia il tratto verticale centrale.\n6. Traccia il tratto orizzontale centrale."],
+["目","mù","occhio","1. Traccia il tratto verticale sinistro.\n2. Traccia il tratto orizzontale superiore.\n3. Traccia il tratto orizzontale inferiore.\n4. Traccia il tratto verticale destro.\n5. Traccia il tratto orizzontale intermedio."],
+["耳","ěr","orecchio","1. Traccia il tratto orizzontale superiore.\n2. Traccia il tratto verticale sinistro.\n3. Traccia il tratto verticale destro.\n4. Traccia il tratto orizzontale inferiore.\n5. Traccia il tratto orizzontale intermedio."],
+["力","lì","forza","1. Traccia il tratto obliquo da sinistra a destra.\n2. Traccia il tratto orizzontale da sinistra a destra."],
+["刂","dāo (forma radicale di 刀)","coltello","1. Traccia il tratto verticale sinistro.\n2. Traccia il tratto verticale destro con gancio."],
+["钅","jīn (forma radicale di 金)","metallo, oro","1. Traccia il tratto orizzontale.\n2. Traccia il tratto verticale.\n3. Traccia il tratto obliquo sinistro.\n4. Traccia il tratto obliquo destro."],
+["艹","cǎo (forma radicale di 草)","erba","1. Traccia il tratto orizzontale.\n2. Traccia il tratto verticale sinistro.\n3. Traccia il tratto verticale destro."],
+["雨","yǔ","pioggia","1. Traccia il tratto orizzontale superiore.\n2. Traccia il tratto verticale.\n3. Traccia i quattro punti interni (dal centro verso l'esterno)."],
+["鸟","niǎo","uccello","1. Traccia il tratto superiore.\n2. Traccia il tratto verticale.\n3. Traccia il tratto obliquo.\n4. Traccia il tratto orizzontale inferiore."],
+["马","mǎ","cavallo","1. Traccia il tratto orizzontale.\n2. Traccia il tratto verticale.\n3. Traccia il tratto obliquo."],
+["车","chē","carro, veicolo","1. Traccia il tratto orizzontale superiore.\n2. Traccia il tratto verticale.\n3. Traccia il tratto orizzontale inferiore.\n4. Traccia il tratto obliquo."],
+["贝","bèi","conchiglia, denaro","1. Traccia il tratto verticale sinistro.\n2. Traccia il tratto orizzontale superiore.\n3. Traccia il tratto orizzontale inferiore.\n4. Traccia il tratto verticale destro.\n5. Traccia il punto."],
+["讠","yán (forma radicale di 言)","parola, dire","1. Traccia il punto.\n2. Traccia il tratto orizzontale.\n3. Traccia il tratto verticale."],
+["饣","shí (forma radicale di 食)","cibo","1. Traccia il punto.\n2. Traccia il tratto orizzontale.\n3. Traccia il tratto verticale."],
+["门","mén","porta","1. Traccia il punto.\n2. Traccia il tratto verticale sinistro.\n3. Traccia il tratto orizzontale.\n4. Traccia il tratto verticale destro."],
+["石","shí","pietra","1. Traccia il tratto orizzontale.\n2. Traccia il tratto verticale.\n3. Traccia il tratto obliquo sinistro.\n4. Traccia il tratto obliquo destro."],
+["纟","sī (forma radicale di 絲)","filo, seta","1. Traccia il tratto orizzontale.\n2. Traccia il tratto verticale.\n3. Traccia il tratto obliquo."]
+];
+
+const PICTOGRAMS_ZH = [
+["山","shān","montagna — raffigura tre vette una accanto all'altra","1. Traccia il tratto verticale centrale.\n2. Traccia il tratto verticale sinistro.\n3. Traccia il tratto verticale destro."],
+["水","shuǐ","acqua — raffigura il corso sinuoso di un fiume che scorre","1. Traccia il tratto verticale centrale.\n2. Traccia il tratto obliquo sinistro.\n3. Traccia il tratto obliquo destro.\n4. Traccia il tratto orizzontale inferiore."],
+["火","huǒ","fuoco — raffigura delle fiamme che si alzano","1. Traccia il punto sinistro in alto.\n2. Traccia il punto destro in alto.\n3. Traccia il tratto verticale centrale.\n4. Traccia il tratto obliquo inferiore."],
+["木","mù","albero — raffigura un tronco con rami in alto e radici in basso","1. Traccia il tratto orizzontale da sinistra a destra.\n2. Traccia il tratto verticale dall'alto verso il basso.\n3. Traccia il tratto obliquo che scende da destra verso sinistra (撇).\n4. Traccia il tratto obliquo che scende da sinistra verso destra (捺)."],
+["人","rén","persona — raffigura una persona in piedi, vista di profilo, con le gambe","1. Traccia il tratto obliquo che scende da destra verso sinistra (撇).\n2. Traccia il tratto obliquo che scende da sinistra verso destra (捺)."],
+["日","rì","sole, giorno — in origine un cerchio con un punto al centro","1. Traccia il tratto verticale sinistro.\n2. Traccia il tratto orizzontale superiore.\n3. Traccia il tratto orizzontale inferiore.\n4. Traccia il tratto verticale destro."],
+["月","yuè","luna, mese — raffigura una falce di luna crescente","1. Traccia il tratto verticale sinistro.\n2. Traccia il tratto orizzontale superiore.\n3. Traccia il tratto orizzontale inferiore.\n4. Traccia il tratto verticale destro."],
+["女","nǚ","donna — raffigura una figura inginocchiata con le braccia raccolte","1. Traccia il tratto obliquo da sinistra a destra.\n2. Traccia il tratto obliquo da destra a sinistra.\n3. Traccia il tratto orizzontale da sinistra a destra."],
+["子","zǐ","bambino, figlio — raffigura un neonato in fasce con le braccia aperte","1. Traccia il tratto orizzontale superiore.\n2. Traccia il tratto verticale.\n3. Traccia il tratto orizzontale inferiore."],
+["田","tián","campo — raffigura un appezzamento di terra diviso in quattro parti","1. Traccia il tratto verticale sinistro.\n2. Traccia il tratto orizzontale superiore.\n3. Traccia il tratto orizzontale inferiore.\n4. Traccia il tratto verticale destro.\n5. Traccia il tratto verticale centrale.\n6. Traccia il tratto orizzontale centrale."],
+["门","mén","porta — raffigura due battenti affiancati di un portone","1. Traccia il punto.\n2. Traccia il tratto verticale sinistro.\n3. Traccia il tratto orizzontale.\n4. Traccia il tratto verticale destro."],
+["雨","yǔ","pioggia — raffigura gocce che cadono da una nuvola","1. Traccia il tratto orizzontale superiore.\n2. Traccia il tratto verticale.\n3. Traccia i quattro punti interni (dal centro verso l'esterno)."],
+["目","mù","occhio — raffigura un occhio aperto, in origine disegnato orizzontale poi ruotato","1. Traccia il tratto verticale sinistro.\n2. Traccia il tratto orizzontale superiore.\n3. Traccia il tratto orizzontale inferiore.\n4. Traccia il tratto verticale destro.\n5. Traccia il tratto orizzontale intermedio."],
+["鸟","niǎo","uccello — raffigura un uccello con becco, ali e coda","1. Traccia il tratto superiore.\n2. Traccia il tratto verticale.\n3. Traccia il tratto obliquo.\n4. Traccia il tratto orizzontale inferiore."],
+["牛","niú","bue, mucca — raffigura la testa di un bue vista di fronte, con le corna","1. Traccia il tratto orizzontale superiore.\n2. Traccia il tratto verticale.\n3. Traccia il tratto orizzontale inferiore.\n4. Traccia il tratto obliquo."]
+];
+
+const TONES_ZH = [
+{num:1, mark:'mā', curve:'flat', char:'妈', meaning:'mamma',
+  desc:"Tono alto e piatto: la voce si mantiene costante sulla nota più acuta, come se si cantasse una nota lunga senza variazioni."},
+{num:2, mark:'má', curve:'rising', char:'麻', meaning:'canapa',
+  desc:"Tono ascendente: parte da un'altezza media e sale verso l'alto, un po' come quando in italiano si fa una domanda ('Cosa?!')."},
+{num:3, mark:'mǎ', curve:'dip', char:'马', meaning:'cavallo',
+  desc:"Tono discendente-ascendente: parte medio-basso, scende ancora verso il minimo e poi risale leggermente verso la fine."},
+{num:4, mark:'mà', curve:'falling', char:'骂', meaning:'sgridare',
+  desc:"Tono discendente: scende bruscamente dall'alto al basso, come un ordine secco e deciso ('Basta!')."},
+{num:5, mark:'ma', curve:'neutral', char:'吗', meaning:"particella interrogativa",
+  desc:"Tono neutro (il '5° tono'): breve e leggero, senza un'altezza propria, si appoggia al tono della sillaba precedente."}
+];
+function toneCurvePath(curve){
+  switch(curve){
+    case 'flat':    return 'M15,35 L105,35';
+    case 'rising':  return 'M15,60 L105,15';
+    case 'dip':     return 'M15,40 C45,70 75,70 105,25';
+    case 'falling': return 'M15,15 L105,60';
+    case 'neutral': return 'M45,40 L75,40';
+    default:        return 'M15,35 L105,35';
+  }
+}
+
+/* ---------------------------------------------------------------
+   SPAGNOLO — falsi amici (falsos amigos) rispetto all'italiano
+--------------------------------------------------------------- */
+const SEED_FALSE_FRIENDS = [
+["burro","asino (non 'burro', che si dice 'mantequilla')"],
+["aceite","olio (non 'aceto', che si dice 'vinagre')"],
+["arena","sabbia (non 'arena/anfiteatro', che si dice 'anfiteatro' o 'ruedo')"],
+["cara","viso, faccia (non l'aggettivo 'cara/costosa', che si dice 'querida' o 'costosa')"],
+["contestar","rispondere (non 'contestare/protestare', che si dice 'protestar' o 'impugnar')"],
+["embarazada","incinta (non 'imbarazzata', che si dice 'avergonzada')"],
+["entender","capire (non 'attendere/aspettare', che si dice 'esperar')"],
+["guardar","conservare, tenere (non 'guardare', che si dice 'mirar')"],
+["mirar","guardare (non 'mirare/puntare', che si dice 'apuntar')"],
+["largo","lungo (non 'largo/ampio', che si dice 'ancho')"],
+["oficina","ufficio (non 'officina meccanica', che si dice 'taller')"],
+["oficio","mestiere, professione (non 'ufficio', che si dice 'oficina')"],
+["presupuesto","preventivo, budget (non 'presupposto', che si dice 'suposición' o 'premisa')"],
+["salir","uscire (non 'salire', che si dice 'subir')"],
+["subir","salire, andare su (non 'subire', che si dice 'sufrir')"],
+["billón","mille miliardi, 10 alla 12 (non un miliardo, che in spagnolo è 'mil millones')"],
+["éxito","successo (non 'esito/risultato', che si dice 'resultado')"],
+["suceso","avvenimento, fatto di cronaca (non 'successo', che si dice 'éxito')"],
+["rato","un momento, un po' di tempo (non 'ratto/topo', che si dice 'rata')"],
+["ropa","vestiti, abbigliamento (non 'roba/cose', che si dice 'cosas')"],
+["vaso","bicchiere (non 'vaso da fiori', che si dice 'jarrón')"],
+["tienda","negozio, oppure tenda da campeggio (attenzione al contesto)"],
+["caldo","brodo (non l'aggettivo 'caldo', che si dice 'caliente')"],
+["pronto","presto, subito (non l'aggettivo 'pronto/preparato', che si dice 'listo')"],
+["pastel","torta, dolce (non 'pastello' per colorare, che si dice 'tiza pastel')"],
+["cuento","racconto, favola (non 'conto', che si dice 'cuenta')"],
+["firma","firma, ma anche azienda/ditta nel linguaggio commerciale"],
+["constipado","raffreddato, che ha il raffreddore (non 'stitico', che si dice 'estreñido')"],
+["molestar","disturbare, dare fastidio (senza l'accezione grave di violenza che ha in italiano)"],
+["manejar","guidare un'auto (non necessariamente 'maneggiare con le mani', che si dice 'manipular')"],
+["listo","pronto, oppure intelligente (non 'lista/elenco', che si dice 'lista')"]
+];
+
+/* ---------------------------------------------------------------
+   CONIUGAZIONI VERBALI — Spagnolo, Francese, Tedesco
+   Modelli di verbi regolari, nel formato tabellare di coniugazione.it
+--------------------------------------------------------------- */
+const CONJUGATIONS = {
+es:{
+  verbs:['hablar (-AR)','comer (-ER)','vivir (-IR)'],
+  persons:['yo','tú','él / ella / usted','nosotros','vosotros','ellos / ustedes'],
+  tenses:{
+    'Presente de indicativo':[['hablo','como','vivo'],['hablas','comes','vives'],['habla','come','vive'],['hablamos','comemos','vivimos'],['habláis','coméis','vivís'],['hablan','comen','viven']],
+    'Pretérito imperfecto':[['hablaba','comía','vivía'],['hablabas','comías','vivías'],['hablaba','comía','vivía'],['hablábamos','comíamos','vivíamos'],['hablabais','comíais','vivíais'],['hablaban','comían','vivían']],
+    'Pretérito indefinido':[['hablé','comí','viví'],['hablaste','comiste','viviste'],['habló','comió','vivió'],['hablamos','comimos','vivimos'],['hablasteis','comisteis','vivisteis'],['hablaron','comieron','vivieron']],
+    'Futuro simple':[['hablaré','comeré','viviré'],['hablarás','comerás','vivirás'],['hablará','comerá','vivirá'],['hablaremos','comeremos','viviremos'],['hablaréis','comeréis','viviréis'],['hablarán','comerán','vivirán']],
+    'Condicional simple':[['hablaría','comería','viviría'],['hablarías','comerías','vivirías'],['hablaría','comería','viviría'],['hablaríamos','comeríamos','viviríamos'],['hablaríais','comeríais','viviríais'],['hablarían','comerían','vivirían']],
+    'Presente de subjuntivo':[['hable','coma','viva'],['hables','comas','vivas'],['hable','coma','viva'],['hablemos','comamos','vivamos'],['habléis','comáis','viváis'],['hablen','coman','vivan']]
+  },
+  imperativePersons:['tú','usted','nosotros','vosotros','ustedes'],
+  imperative:[['habla','come','vive'],['hable','coma','viva'],['hablemos','comamos','vivamos'],['hablad','comed','vivid'],['hablen','coman','vivan']]
+},
+fr:{
+  verbs:['parler (-ER)','finir (-IR)','vendre (-RE)'],
+  persons:['je','tu','il / elle / on','nous','vous','ils / elles'],
+  tenses:{
+    'Présent':[['parle','finis','vends'],['parles','finis','vends'],['parle','finit','vend'],['parlons','finissons','vendons'],['parlez','finissez','vendez'],['parlent','finissent','vendent']],
+    'Imparfait':[['parlais','finissais','vendais'],['parlais','finissais','vendais'],['parlait','finissait','vendait'],['parlions','finissions','vendions'],['parliez','finissiez','vendiez'],['parlaient','finissaient','vendaient']],
+    'Passé composé':[["j'ai parlé","j'ai fini","j'ai vendu"],['tu as parlé','tu as fini','tu as vendu'],['il a parlé','il a fini','il a vendu'],['nous avons parlé','nous avons fini','nous avons vendu'],['vous avez parlé','vous avez fini','vous avez vendu'],['ils ont parlé','ils ont fini','ils ont vendu']],
+    'Futur simple':[['parlerai','finirai','vendrai'],['parleras','finiras','vendras'],['parlera','finira','vendra'],['parlerons','finirons','vendrons'],['parlerez','finirez','vendrez'],['parleront','finiront','vendront']],
+    'Conditionnel présent':[['parlerais','finirais','vendrais'],['parlerais','finirais','vendrais'],['parlerait','finirait','vendrait'],['parlerions','finirions','vendrions'],['parleriez','finiriez','vendriez'],['parleraient','finiraient','vendraient']],
+    'Subjonctif présent':[['que je parle','que je finisse','que je vende'],['que tu parles','que tu finisses','que tu vendes'],["qu'il parle","qu'il finisse","qu'il vende"],['que nous parlions','que nous finissions','que nous vendions'],['que vous parliez','que vous finissiez','que vous vendiez'],["qu'ils parlent","qu'ils finissent","qu'ils vendent"]]
+  },
+  imperativePersons:['tu','nous','vous'],
+  imperative:[['parle','finis','vends'],['parlons','finissons','vendons'],['parlez','finissez','vendez']]
+},
+de:{
+  verbs:['sein','haben','machen (schwach)'],
+  persons:['ich','du','er / sie / es','wir','ihr','sie / Sie'],
+  tenses:{
+    'Präsens':[['bin','habe','mache'],['bist','hast','machst'],['ist','hat','macht'],['sind','haben','machen'],['seid','habt','macht'],['sind','haben','machen']],
+    'Präteritum':[['war','hatte','machte'],['warst','hattest','machtest'],['war','hatte','machte'],['waren','hatten','machten'],['wart','hattet','machtet'],['waren','hatten','machten']],
+    'Perfekt':[['bin gewesen','habe gehabt','habe gemacht'],['bist gewesen','hast gehabt','hast gemacht'],['ist gewesen','hat gehabt','hat gemacht'],['sind gewesen','haben gehabt','haben gemacht'],['seid gewesen','habt gehabt','habt gemacht'],['sind gewesen','haben gehabt','haben gemacht']],
+    'Futur I':[['werde sein','werde haben','werde machen'],['wirst sein','wirst haben','wirst machen'],['wird sein','wird haben','wird machen'],['werden sein','werden haben','werden machen'],['werdet sein','werdet haben','werdet machen'],['werden sein','werden haben','werden machen']],
+    "Konjunktiv II":[['wäre','hätte','würde machen'],['wärst','hättest','würdest machen'],['wäre','hätte','würde machen'],['wären','hätten','würden machen'],['wärt','hättet','würdet machen'],['wären','hätten','würden machen']]
+  },
+  imperativePersons:['du','ihr','Sie'],
+  imperative:[['sei','hab(e)','mach(e)'],['seid','habt','macht'],['seien Sie','haben Sie','machen Sie']]
+}
+};
+
+function renderConjugationCard(code, accent){
+  const c = CONJUGATIONS[code];
+  if(!c) return '';
+  const tenseBlocks = Object.entries(c.tenses).map(([tenseName, rows])=>`
+    <h3 style="margin:18px 0 8px 0;font-size:13.5px;color:${accent};text-transform:uppercase;letter-spacing:.03em;">${escapeHtml(tenseName)}</h3>
+    <div class="ff-wrap">
+      <table class="sessions">
+        <thead><tr><th></th>${c.verbs.map(v=>`<th>${escapeHtml(v)}</th>`).join('')}</tr></thead>
+        <tbody>
+          ${c.persons.map((p,i)=>`<tr><td>${escapeHtml(p)}</td>${rows[i].map(f=>`<td>${escapeHtml(f)}</td>`).join('')}</tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`).join('');
+  const impBlock = `
+    <h3 style="margin:18px 0 8px 0;font-size:13.5px;color:${accent};text-transform:uppercase;letter-spacing:.03em;">Imperativo</h3>
+    <div class="ff-wrap">
+      <table class="sessions">
+        <thead><tr><th></th>${c.verbs.map(v=>`<th>${escapeHtml(v)}</th>`).join('')}</tr></thead>
+        <tbody>
+          ${c.imperativePersons.map((p,i)=>`<tr><td>${escapeHtml(p)}</td>${c.imperative[i].map(f=>`<td>${escapeHtml(f)}</td>`).join('')}</tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  return `
+    <div class="card">
+      <h2>Coniugazioni verbali <span class="n">modelli regolari: ${c.verbs.map(v=>v.split(' ')[0]).join(', ')}</span></h2>
+      ${tenseBlocks}
+      ${impBlock}
+    </div>`;
+}
+
+const ALPHABETS = {
+ar:[
+["ا","alif","'a' lunga, o muta come supporto della hamza","Non si collega alla lettera successiva: un unico tratto verticale, dall'alto verso il basso"],
+["ب","bāʼ","'b' come in banana","Si collega su entrambi i lati; il corpo si traccia da destra a sinistra, il punto sotto si aggiunge per ultimo"],
+["ت","tāʼ","'t' come in tavolo","Come ب, ma con due punti sopra aggiunti per ultimi"],
+["ث","thāʼ","'th' sorda inglese, come in think","Come ب, ma con tre punti sopra aggiunti per ultimi"],
+["ج","jīm","'g' dolce come in giorno (o 'j' francese secondo il dialetto)","Si collega su entrambi i lati; corpo a forma di U con codina sotto la riga, punto sotto aggiunto per ultimo"],
+["ح","ḥāʼ","'h' aspirata forte, dalla gola","Come ج ma senza punto"],
+["خ","khāʼ","'kh' gutturale, come la 'j' spagnola","Come ح ma con un punto sopra aggiunto per ultimo"],
+["د","dāl","'d' come in dado","Non si collega alla lettera successiva: un unico tratto curvo dall'alto verso il basso"],
+["ذ","dhāl","'th' sonora inglese, come in this","Come د ma con un punto sopra"],
+["ر","rāʼ","'r' vibrante, arrotata come in italiano","Non si collega alla lettera successiva: tratto curvo che scende sotto la riga"],
+["ز","zāy","'z' sonora come in zero","Come ر ma con un punto sopra"],
+["س","sīn","'s' sorda come in sasso","Si collega su entrambi i lati; tre piccole punte sulla riga, tracciate da destra a sinistra"],
+["ش","shīn","'sh' come in shampoo","Come س ma con tre punti sopra"],
+["ص","ṣād","'s' enfatica, più profonda della s normale","Si collega su entrambi i lati; corpo arrotondato con coda che sale, tracciato da destra a sinistra"],
+["ض","ḍād","'d' enfatica, più profonda della d normale","Come ص ma con un punto sopra"],
+["ط","ṭāʼ","'t' enfatica","Si collega su entrambi i lati; corpo arrotondato con un'asta verticale che sale sopra la riga"],
+["ظ","ẓāʼ","'th/z' enfatica","Come ط ma con un punto sopra"],
+["ع","ʿayn","suono gutturale dalla gola, senza equivalente in italiano","Si collega su entrambi i lati; forma a occhiello, tracciata dall'alto in senso antiorario"],
+["غ","ghayn","'gh' gutturale, simile alla 'r' francese","Come ع ma con un punto sopra"],
+["ف","fāʼ","'f' come in fiore","Si collega su entrambi i lati; piccolo cerchio con un punto sopra, poi coda verso sinistra"],
+["ق","qāf","'q' gutturale profonda, dal fondo della gola","Come ف ma con due punti sopra e coda che scende sotto la riga"],
+["ك","kāf","'k' come in casa","Si collega su entrambi i lati; asta verticale con un piccolo tratto interno a forma di 's'"],
+["ل","lām","'l' come in luna","Si collega su entrambi i lati; asta verticale alta che scende con una curva verso sinistra"],
+["م","mīm","'m' come in mano","Si collega su entrambi i lati; piccolo cerchio chiuso seguito da una coda"],
+["ن","nūn","'n' come in nave","Si collega su entrambi i lati; forma a bacinella con un punto sopra, aggiunto per ultimo"],
+["ه","hāʼ","'h' aspirata leggera","Si collega su entrambi i lati; ha quattro forme piuttosto diverse (isolata, iniziale, mediale, finale) da imparare a memoria"],
+["و","wāw","'w', oppure 'u' lunga come vocale","Non si collega alla lettera successiva: cerchio con coda che scende sotto la riga"],
+["ي","yāʼ","'y', oppure 'i' lunga come vocale","Si collega su entrambi i lati; le forme isolata e finale scendono sotto la riga, con due punti sotto aggiunti per ultimo"]
+],
+zh:[
+["b","iniziale","'p' leggera, quasi sorda","Lettera latina: si scrive come in italiano"],
+["p","iniziale","'p' aspirata, con soffio d'aria","Lettera latina: si scrive come in italiano"],
+["m","iniziale","'m' come in mano","Lettera latina: si scrive come in italiano"],
+["f","iniziale","'f' come in fiore","Lettera latina: si scrive come in italiano"],
+["d","iniziale","'t' leggera, quasi sonora","Lettera latina: si scrive come in italiano"],
+["t","iniziale","'t' aspirata, con soffio d'aria","Lettera latina: si scrive come in italiano"],
+["n","iniziale","'n' come in nave","Lettera latina: si scrive come in italiano"],
+["l","iniziale","'l' come in luna","Lettera latina: si scrive come in italiano"],
+["g","iniziale","'k' leggera, quasi sonora","Lettera latina: si scrive come in italiano"],
+["k","iniziale","'k' aspirata, con soffio d'aria","Lettera latina: si scrive come in italiano"],
+["h","iniziale","'h' aspirata, gutturale leggera","Lettera latina: si scrive come in italiano"],
+["j","iniziale","'c' dolce come in ciao, lingua verso i denti","Lettera latina: si scrive come in italiano"],
+["q","iniziale","'c' dolce aspirata, con molto soffio","Lettera latina: si scrive come in italiano"],
+["x","iniziale","'sc' come in scena, sibilante dolce","Lettera latina: si scrive come in italiano"],
+["zh","iniziale","'g' retroflessa, lingua arrotolata all'indietro","Due lettere latine: si scrivono come in italiano"],
+["ch","iniziale","'c' retroflessa aspirata","Due lettere latine: si scrivono come in italiano"],
+["sh","iniziale","'sc' retroflessa","Due lettere latine: si scrivono come in italiano"],
+["r","iniziale","via di mezzo tra 'r' e 'j' francese, retroflessa","Lettera latina: si scrive come in italiano"],
+["z","iniziale","'z' leggera, come in pizza ma più debole","Lettera latina: si scrive come in italiano"],
+["c","iniziale","'z' aspirata, con soffio d'aria","Lettera latina: si scrive come in italiano"],
+["s","iniziale","'s' sorda come in sasso","Lettera latina: si scrive come in italiano"],
+["y","iniziale","'y' come in ieri","Lettera latina: si scrive come in italiano"],
+["w","iniziale","'w' come in uovo","Lettera latina: si scrive come in italiano"],
+["a","finale","'a' come in casa","Lettera latina: si scrive come in italiano"],
+["o","finale","'o' come in botte","Lettera latina: si scrive come in italiano"],
+["e","finale","suono gutturale, tra 'e' e la 'ö' tedesca","Lettera latina: si scrive come in italiano"],
+["i","finale","'i' come in vino (muta dopo zh, ch, sh, r, z, c, s)","Lettera latina: si scrive come in italiano"],
+["u","finale","'u' come in luna","Lettera latina: si scrive come in italiano"],
+["ü","finale","come la 'u' francese/tedesca, labbra strette","Lettera latina con due puntini sopra la u"]
+],
+el:[
+["Α α","álfa","'a' come in casa","Maiuscola come la 'A' latina; la minuscola ha due tratti obliqui e uno orizzontale al centro"],
+["Β β","víta","'v' come in vino","Maiuscola come la 'B' latina; la minuscola ha un'asta che scende sotto la riga con una pancia in alto"],
+["Γ γ","gámma","'gh' gutturale dolce (davanti a a,o,u) o 'y' (davanti a e,i)","Maiuscola a forma di squadra; la minuscola è un angolo aperto verso il basso, senza sollevare la penna"],
+["Δ δ","délta","'th' sonora inglese, come in this","Maiuscola triangolare; la minuscola ha un cerchio con un'antenna che sale verso sinistra"],
+["Ε ε","épsilon","'e' breve come in bene","Maiuscola come la 'E' latina; la minuscola è arrotondata, simile a un 3 speculare"],
+["Ζ ζ","zíta","'z' sonora","Come la 'Z' latina, con un piccolo gancio finale nella minuscola che scende sotto la riga"],
+["Η η","íta","'i' come in vino","Maiuscola come la 'H' latina; la minuscola ha un'asta che scende sotto la riga a destra"],
+["Θ θ","thíta","'th' sorda inglese, come in think","Maiuscola un cerchio con barretta orizzontale; la minuscola è simile ma più stretta e allungata verticalmente"],
+["Ι ι","yóta","'i' come in vino","Semplice asta verticale, come la 'I' latina"],
+["Κ κ","káppa","'k' come in casa","Si traccia come la 'K' latina"],
+["Λ λ","lámda","'l' come in luna","Maiuscola triangolare senza base; la minuscola ha un tratto lungo che scende verso destra"],
+["Μ μ","mi","'m' come in mano","Maiuscola come la 'M' latina; la minuscola ha una coda che scende sotto la riga a destra"],
+["Ν ν","ni","'n' come in nave","Maiuscola come la 'N' latina; la minuscola somiglia a una 'v' con un tratto che sale a destra"],
+["Ξ ξ","ksi","'ks' come in taxi","Maiuscola con tre tratti orizzontali sovrapposti; la minuscola è una linea sinuosa a forma di serpentina"],
+["Ο ο","ómikron","'o' breve come in botte","Un cerchio, come la 'O' latina"],
+["Π π","pi","'p' come in pane","Maiuscola a forma di ponte; la minuscola somiglia a una 'n' con due piccole gambe"],
+["Ρ ρ","ro","'r' arrotata come in italiano","Maiuscola come la 'P' latina; la minuscola ha un'asta che scende sotto la riga"],
+["Σ σ/ς","sígma","'s' sorda come in sasso (ς a fine parola)","Maiuscola a zig-zag; la minuscola è arrotondata (ς si allunga dritta quando è l'ultima lettera della parola)"],
+["Τ τ","taf","'t' come in tavolo","Si traccia come la 'T' latina"],
+["Υ υ","ýpsilon","'i' come in vino","Maiuscola come la 'Y' latina; la minuscola somiglia a una 'v' con una piccola coda"],
+["Φ φ","fi","'f' come in fiore","Maiuscola un cerchio con un'asta verticale; la minuscola ha un cerchio centrale con una lunga asta che scende sotto la riga"],
+["Χ χ","chi","'h' gutturale aspirata, come la 'j' spagnola","Si traccia come la 'X' latina, con la minuscola che scende leggermente sotto la riga"],
+["Ψ ψ","psi","'ps' come in gypsum","Maiuscola a forma di tridente; la minuscola è simile con un'asta che scende sotto la riga"],
+["Ω ω","oméga","'o' come in botte","Maiuscola arrotondata con due piccole basi; la minuscola somiglia a una 'w' morbida"]
+],
+de:[
+["A a","a","'a' come in casa","Un cerchio con un'asta verticale a destra, come in italiano"],
+["B b","be","'b' come in banana (quasi 'p' a fine parola)","Asta verticale con due pance arrotondate a destra, dall'alto verso il basso"],
+["C c","tse","'k' o 'ts' a seconda della parola","Una curva aperta a destra, come una 'c' italiana"],
+["D d","de","'d' come in dado (quasi 't' a fine parola)","Asta verticale con una pancia arrotondata a destra"],
+["E e","e","'e' chiusa come in sete","Cerchio con una barretta orizzontale al centro"],
+["F f","ef","'f' come in fiore","Asta verticale con due barrette orizzontali in alto"],
+["G g","ge","'g' dura come in gatto (quasi 'k' a fine parola)","Cerchio con una coda che scende sotto la riga, come in italiano"],
+["H h","ha","aspirata leggera a inizio parola, muta dopo vocale lunga","Due aste verticali unite da una barretta orizzontale a metà altezza"],
+["I i","i","'i' come in vino","Asta verticale con un punto sopra"],
+["J j","yot","'y' come in ieri","Asta verticale con una curva verso sinistra in basso e un punto sopra"],
+["K k","ka","'k' come in casa","Asta verticale con due tratti obliqui che si incontrano a metà"],
+["L l","el","'l' come in luna","Asta verticale con un piccolo tratto orizzontale in basso"],
+["M m","em","'m' come in mano","Due gobbe arrotondate, come in italiano"],
+["N n","en","'n' come in nave","Una gobba arrotondata, come in italiano"],
+["O o","o","'o' chiusa come in sole","Un cerchio completo"],
+["P p","pe","'p' come in pane","Asta verticale con una pancia arrotondata in alto"],
+["Q q","ku","sempre seguita da 'u', si legge 'kv'","Cerchio con una piccola coda obliqua in basso a destra"],
+["R r","er","'r' gutturale (uvulare) o arrotata secondo la regione","Asta verticale con una pancia in alto e una gamba obliqua in basso"],
+["S s","es","'s' sonora davanti a vocale, sorda altrove","Doppia curva a S, dall'alto verso il basso"],
+["T t","te","'t' come in tavolo","Asta verticale con una barretta orizzontale in alto"],
+["U u","u","'u' come in luna","Curva a U con una piccola asta a destra"],
+["V v","fau","'f' come in fiore nella maggior parte delle parole","Due tratti obliqui che si incontrano in basso, a punta"],
+["W w","ve","'v' come in vino","Come due 'v' unite, quattro tratti obliqui"],
+["X x","iks","'ks' come in taxi","Due tratti obliqui incrociati"],
+["Y y","ypsilon","via di mezzo tra 'u' e 'i' francese","Come una 'v' con un'asta verticale che scende sotto la riga"],
+["Z z","tset","'ts' come in pizza","Tratto orizzontale in alto, diagonale, tratto orizzontale in basso"],
+["Ä ä","a-umlaut","'e' aperta, come in letto","Come una 'a', con due puntini aggiunti sopra per ultimi"],
+["Ö ö","o-umlaut","suono tra 'o' ed 'e', labbra arrotondate","Come una 'o', con due puntini aggiunti sopra per ultimi"],
+["Ü ü","u-umlaut","suono tra 'u' ed 'i', labbra arrotondate","Come una 'u', con due puntini aggiunti sopra per ultimi"],
+["ß","eszett","'s' sorda intensa, equivale a 'ss'","Lettera unica del tedesco, sempre minuscola: assomiglia a una 'B' allungata verso il basso"]
+]
+};
+
+/* ---------------------------------------------------------------
+   STORAGE HELPERS
+--------------------------------------------------------------- */
+async function loadKey(key, fallback){
+  try{
+    const { data, error } = await supabaseClient
+      .from('kv_store').select('value').eq('key', key).maybeSingle();
+    if(error) throw error;
+    return data ? data.value : fallback;
+  }catch(e){
+    console.error('Errore di lettura', key, e);
+    showStorageWarning();
+    return fallback;
+  }
+}
+async function saveKey(key, value){
+  try{
+    const { data:{ user } } = await supabaseClient.auth.getUser();
+    if(!user) throw new Error('Utente non autenticato');
+    const { error } = await supabaseClient
+      .from('kv_store')
+      .upsert({ user_id:user.id, key, value, updated_at:new Date().toISOString() }, { onConflict:'user_id,key' });
+    if(error) throw error;
+  }catch(e){
+    console.error('Errore di salvataggio', key, e);
+    showStorageWarning();
+  }
+}
+function showToast(message){
+  const existing = document.getElementById('app-toast');
+  if(existing) existing.remove();
+  const w = document.createElement('div');
+  w.id = 'app-toast';
+  w.style.cssText = 'position:fixed;bottom:16px;left:16px;right:16px;max-width:420px;background:#B23A2E;color:#fff;padding:12px 16px;border-radius:10px;font-size:13px;z-index:999;box-shadow:0 8px 22px rgba(0,0,0,.2);';
+  w.textContent = message;
+  document.body.appendChild(w);
+  setTimeout(()=>w.remove(), 6000);
+}
+function showStorageWarning(){
+  showToast('Il salvataggio non è riuscito. Controlla la connessione e riprova.');
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+async function seedWords(code){
+  await ensureLangLoaded(code);
+  const data = cache.lang[code];
+  const existing = new Set(data.words.map(w=>w.term));
+  let added = 0;
+  SEED_WORDS[code].forEach(([term, translation, family, note])=>{
+    if(!existing.has(term)){
+      data.words.push({id:uid(), term, translation, family, note: note||'', date:new Date().toISOString()});
+      existing.add(term);
+      added++;
+    }
+  });
+  await saveKey('lang:'+code, data);
+  return added;
+}
+async function seedGrammar(code){
+  await ensureLangLoaded(code);
+  const data = cache.lang[code];
+  const existing = new Set(data.grammar.map(g=>g.title));
+  let added = 0;
+  SEED_GRAMMAR[code].forEach(([title, content])=>{
+    if(!existing.has(title)){
+      data.grammar.push({id:uid(), title, content, date:new Date().toISOString()});
+      existing.add(title);
+      added++;
+    }
+  });
+  await saveKey('lang:'+code, data);
+  return added;
+}
+
+/* in-memory cache, lazy-loaded per language */
+const cache = { lang:{}, sessions:{}, ff:null, frAudio:null, frPhoto:null };
+
+async function ensureLangLoaded(code){
+  if(!cache.lang[code]) cache.lang[code] = await loadKey('lang:'+code, {words:[], grammar:[]});
+  if(!cache.sessions[code]) cache.sessions[code] = await loadKey('sessions:'+code, []);
+}
+async function ensureFFLoaded(){ if(!cache.ff) cache.ff = await loadKey('spanish:false-friends', []); }
+async function ensureFrLoaded(){
+  if(!cache.frAudio) cache.frAudio = await loadKey('french:audio', []);
+  if(!cache.frPhoto) cache.frPhoto = await loadKey('french:photo', []);
+}
+
+/* ---------------------------------------------------------------
+   TIMER (single global timer across languages)
+--------------------------------------------------------------- */
+const timer = { running:false, code:null, client:'', rate:0, startTs:null, intervalId:null };
+
+function fmtDuration(sec){
+  const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60), s = Math.floor(sec%60);
+  return [h,m,s].map(v=>String(v).padStart(2,'0')).join(':');
+}
+function startTimer(code, client, rate){
+  if(timer.running) return;
+  timer.running = true; timer.code = code; timer.client = client||'Studio personale';
+  timer.rate = parseFloat(rate)||0; timer.startTs = Date.now();
+  timer.intervalId = setInterval(tickTimer, 1000);
+  tickTimer();
+  renderSidebar();
+}
+async function stopTimer(){
+  if(!timer.running) return;
+  const code = timer.code;
+  const durationSec = Math.max(1, Math.round((Date.now()-timer.startTs)/1000));
+  await ensureLangLoaded(code);
+  cache.sessions[code].unshift({
+    id:uid(), client:timer.client, rate:timer.rate,
+    date:new Date().toISOString(), durationSec
+  });
+  await saveKey('sessions:'+code, cache.sessions[code]);
+  clearInterval(timer.intervalId);
+  timer.running=false; timer.code=null; timer.intervalId=null;
+  renderSidebar();
+  if(currentView===code) renderLangPage(code);
+}
+function tickTimer(){
+  if(currentView===timer.code){
+    const el = document.getElementById('timer-display');
+    if(el) el.textContent = fmtDuration((Date.now()-timer.startTs)/1000);
+  }
+}
+
+/* ---------------------------------------------------------------
+   ROUTER / APP SHELL
+--------------------------------------------------------------- */
+let currentView = 'home';
+const app = document.getElementById('app');
+
+function shell(){
+  app.innerHTML = `
+    <div class="sidebar" id="sidebar"></div>
+    <div class="main">
+      <div class="accent-bar" id="accent-bar" style="background:${currentView==='home'?'var(--ink)':(LANGS[currentView]?.accent||'var(--ink)')}"></div>
+      <div class="page" id="page"></div>
+    </div>`;
+  renderSidebar();
+}
+
+function renderSidebar(){
+  const sb = document.getElementById('sidebar');
+  if(!sb) return;
+  const navBtn = (code, label, glyph, accent) => `
+    <button class="nav-btn ${currentView===code?'active':''}" data-nav="${code}">
+      <span class="glyph" style="background:${accent};color:#fff;">${glyph}</span>
+      <span class="label">${label}</span>
+      ${timer.running && timer.code===code ? '<span class="dot" title="Timer in corso"></span>' : ''}
+    </button>`;
+  sb.innerHTML = `
+    <div class="brand">
+      <div class="display">Palestra delle Lingue</div>
+      <div class="sub">Vocabolario, grammatica &amp; studio</div>
+    </div>
+    <div class="user-chip" id="user-chip"><span id="user-email">…</span><button id="logout-btn">Esci</button></div>
+    <div class="nav-group">
+      <button class="nav-btn ${currentView==='home'?'active':''}" data-nav="home">
+        <span class="glyph" style="background:#3A3F52;">◈</span>
+        <span class="label">Scrivania</span>
+      </button>
+    </div>
+    <div class="nav-label">Lingue principali</div>
+    <div class="nav-group">
+      ${CORE_LANGS.map(c=>navBtn(c, LANGS[c].name, LANGS[c].glyph, LANGS[c].accent)).join('')}
+    </div>
+    <div class="nav-label">Sezioni dedicate</div>
+    <div class="nav-group">
+      ${navBtn('es', LANGS.es.name, LANGS.es.glyph, LANGS.es.accent)}
+      ${navBtn('fr', LANGS.fr.name, LANGS.fr.glyph, LANGS.fr.accent)}
+    </div>
+  `;
+  sb.querySelectorAll('[data-nav]').forEach(b=>{
+    b.addEventListener('click', ()=>navigateTo(b.dataset.nav));
+  });
+  supabaseClient.auth.getUser().then(({data:{user}})=>{
+    const el = document.getElementById('user-email');
+    if(el && user) el.textContent = user.email;
+  });
+  const logoutBtn = document.getElementById('logout-btn');
+  if(logoutBtn) logoutBtn.addEventListener('click', ()=>supabaseClient.auth.signOut());
+}
+
+async function navigateTo(view){
+  currentView = view;
+  const bar = document.getElementById('accent-bar');
+  if(bar) bar.style.background = view==='home' ? 'var(--ink)' : (LANGS[view]?.accent || 'var(--ink)');
+  renderSidebar();
+  if(view==='home') return renderHome();
+  if(view==='es') return renderSpanish();
+  if(view==='fr') return renderFrench();
+  return renderLangPage(view);
+}
+
+/* ---------------------------------------------------------------
+   HOME
+--------------------------------------------------------------- */
+async function renderHome(){
+  const page = document.getElementById('page');
+  page.innerHTML = `<div class="empty-state">Caricamento…</div>`;
+  await Promise.all(CORE_LANGS.map(ensureLangLoaded));
+  await ensureFFLoaded();
+  await ensureFrLoaded();
+
+  const cards = CORE_LANGS.map(code=>{
+    const d = cache.lang[code];
+    const totalSec = cache.sessions[code].reduce((a,s)=>a+s.durationSec,0);
+    return `
+      <button class="home-card" data-nav="${code}">
+        <div class="glyph" style="background:${LANGS[code].accent}">${LANGS[code].glyph}</div>
+        <h3>${LANGS[code].name}</h3>
+        <div class="meta">${d.words.length} parole · ${d.grammar.length} regole · ${fmtDuration(totalSec)} di studio</div>
+      </button>`;
+  }).join('');
+
+  const esCard = `
+    <button class="home-card" data-nav="es">
+      <div class="glyph" style="background:${LANGS.es.accent}">${LANGS.es.glyph}</div>
+      <h3>${LANGS.es.name}</h3>
+      <div class="meta">${cache.ff.length} falsi amici catalogati</div>
+    </button>`;
+  const frCard = `
+    <button class="home-card" data-nav="fr">
+      <div class="glyph" style="background:${LANGS.fr.accent}">${LANGS.fr.glyph}</div>
+      <h3>${LANGS.fr.name}</h3>
+      <div class="meta">${cache.frAudio.length + cache.frPhoto.length} trascrizioni salvate</div>
+    </button>`;
+
+  const totalWords = CORE_LANGS.reduce((a,c)=>a+cache.lang[c].words.length,0);
+  const totalSec = CORE_LANGS.reduce((a,c)=>a+cache.sessions[c].reduce((x,s)=>x+s.durationSec,0),0);
+
+  page.innerHTML = `
+    <div class="page-head">
+      <span class="glyph-big" style="background:#3A3F52;">◈</span>
+      <h1>Scrivania</h1>
+      <p>Il punto di partenza su tutte le lingue in corso. Scegli una sezione per aggiungere parole, regole grammaticali e avviare una sessione di studio.</p>
+    </div>
+    <div class="summary-bar">
+      <div class="stat"><div class="num mono">${totalWords}</div><div class="lbl">Parole totali</div></div>
+      <div class="stat"><div class="num mono">${fmtDuration(totalSec)}</div><div class="lbl">Ore di studio totali</div></div>
+      <div class="stat"><div class="num mono">${CORE_LANGS.length+2}</div><div class="lbl">Sezioni attive</div></div>
+    </div>
+    <div class="home-grid">${cards}${esCard}${frCard}</div>
+  `;
+  page.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>navigateTo(b.dataset.nav)));
+}
+
+/* ---------------------------------------------------------------
+   LANGUAGE PAGE (Arabo / Cinese / Greco / Tedesco)
+--------------------------------------------------------------- */
+async function renderLangPage(code){
+  const page = document.getElementById('page');
+  page.innerHTML = `<div class="empty-state">Caricamento…</div>`;
+  await ensureLangLoaded(code);
+  const conf = LANGS[code];
+  const data = cache.lang[code];
+  const sessions = cache.sessions[code];
+  const totalSec = sessions.reduce((a,s)=>a+s.durationSec,0);
+  const totalValue = sessions.reduce((a,s)=>a+(s.durationSec/3600)*s.rate,0);
+  const termClass = conf.termFont ? ' '+conf.termFont : '';
+
+  const familyBlocks = FAMILIES.map(fam=>{
+    const words = data.words.filter(w=>w.family===fam.id);
+    if(words.length===0) return '';
+    return `
+      <div class="family-group">
+        <h3>${fam.label} <span class="count">${words.length}</span></h3>
+        <div class="word-grid">
+          ${words.map(w=>`
+            <div class="word-card">
+              <div class="actions">
+                <button class="speak-btn" data-speak="${escapeHtml(w.term)}" data-speak-lang="${code}" title="Ascolta la pronuncia">🔊</button>
+                <button class="btn-danger del" data-del-word="${w.id}" title="Elimina">✕</button>
+              </div>
+              <div class="term${termClass}">${escapeHtml(w.term)}</div>
+              <div class="transl">${escapeHtml(w.translation)}</div>
+              ${w.note ? `<div class="note">${escapeHtml(w.note)}</div>` : ''}
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  page.innerHTML = `
+    <div class="page-head">
+      <span class="glyph-big" style="background:${conf.accent}">${conf.glyph}</span>
+      <h1>${conf.name}</h1>
+      <p>Vocabolario, regole grammaticali e sessioni di studio per il ${conf.name.toLowerCase()}.</p>
+    </div>
+
+    <div class="summary-bar">
+      <div class="stat"><div class="num mono">${data.words.length}</div><div class="lbl">Parole conosciute</div></div>
+      <div class="stat"><div class="num mono">${data.grammar.length}</div><div class="lbl">Regole grammaticali</div></div>
+      <div class="stat"><div class="num mono">${fmtDuration(totalSec)}</div><div class="lbl">Tempo di studio</div></div>
+      <div class="stat"><div class="num mono">€ ${totalValue.toFixed(2)}</div><div class="lbl">Valore sessioni</div></div>
+    </div>
+
+    <div class="card">
+      <h2>${code==='zh' ? 'Suoni di base (Pinyin) e caratteri' : 'Alfabeto e Suoni'}</h2>
+      <div class="empty-state" style="background:#F7F4EC;border-radius:10px;padding:12px 14px;margin-bottom:14px;color:var(--text);">
+        📓 ${NOTEBOOK_INFO[code]}
+      </div>
+      <div class="word-grid">
+        ${ALPHABETS[code].map(([ch,name,sound,howto])=>`
+          <div class="word-card">
+            <div class="actions">
+              <button class="speak-btn" data-speak="${escapeHtml(ch)}" data-speak-lang="${code}" title="Ascolta">🔊</button>
+            </div>
+            <div class="term${termClass}" style="font-size:22px;">${escapeHtml(ch)}</div>
+            <div class="transl">${escapeHtml(name)} · ${escapeHtml(sound)}</div>
+            <div class="note">✍️ ${escapeHtml(howto)}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    ${code!=='zh' ? `
+    <div class="card">
+      <h2>Pratica di scrittura <span class="n">traccia ogni lettera seguendo il tratteggio</span></h2>
+      <div class="empty-state" style="background:#F7F4EC;border-radius:10px;padding:12px 14px;margin-bottom:14px;color:var(--text);">
+        La freccia colorata sovrapposta a ogni carattere indica la direzione generale del tratto; il testo sotto spiega come si costruisce la lettera nel dettaglio. Ricalca la forma tratteggiata su carta, seguendo le righe/quadretti guida.
+      </div>
+      <div class="trace-grid">
+        ${ALPHABETS[code].map((entry,idx)=>tracingTile(entry, code, conf.accent, idx, 'new')).join('')}
+      </div>
+    </div>` : ''}
+
+    ${code==='zh' ? `
+    <div class="card">
+      <h2>Radicali <span class="n">部首 (bùshǒu)</span></h2>
+      <div class="empty-state" style="background:#F7F4EC;border-radius:10px;padding:12px 14px;margin-bottom:14px;color:var(--text);">
+        I radicali sono i "mattoncini" con cui si costruiscono la maggior parte dei caratteri cinesi: conoscerli aiuta a intuire il significato o la pronuncia di un carattere nuovo. La guida sotto indica l'ordine dei tratti.
+      </div>
+      <div class="trace-grid">
+        ${RADICALS_ZH.map((entry,idx)=>tracingTile(entry, code, conf.accent, 'rad'+idx, 'legacy')).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Caratteri pittografici di base <span class="n">象形字 (xiàngxíngzì)</span></h2>
+      <div class="empty-state" style="background:#F7F4EC;border-radius:10px;padding:12px 14px;margin-bottom:14px;color:var(--text);">
+        Questi sono tra i caratteri più antichi della lingua: nascono come disegni stilizzati della cosa che rappresentano. Riconoscere il disegno originale aiuta a memorizzarli. Segui l'ordine numerato dei tratti.
+      </div>
+      <div class="trace-grid">
+        ${PICTOGRAMS_ZH.map((entry,idx)=>tracingTile(entry, code, conf.accent, 'pic'+idx, 'legacy')).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>I 5 toni del mandarino</h2>
+      <div class="empty-state" style="background:#F7F4EC;border-radius:10px;padding:12px 14px;margin-bottom:14px;color:var(--text);">
+        La stessa sillaba "ma" cambia completamente significato a seconda del tono. Premi 🔊 su ogni carattere per sentire la differenza.
+      </div>
+      <div class="trace-grid">
+        ${TONES_ZH.map(t=>`
+          <div class="trace-tile">
+            <svg viewBox="0 0 120 80" class="trace-svg">
+              <line x1="15" y1="35" x2="105" y2="35" stroke="#E6E0D2" stroke-width="1" stroke-dasharray="2 3"/>
+              <path d="${toneCurvePath(t.curve)}" fill="none" stroke="${conf.accent}" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            <div class="trace-cap">${t.num}° tono — ${escapeHtml(t.mark)} <span class="trace-name">${escapeHtml(t.char)}</span>
+              <button class="speak-btn" data-speak="${escapeHtml(t.char)}" data-speak-lang="zh" title="Ascolta">🔊</button>
+            </div>
+            <div class="trace-howto"><strong>${escapeHtml(t.meaning)}</strong> — ${escapeHtml(t.desc)}</div>
+          </div>`).join('')}
+      </div>
+    </div>` : ''}
+
+    ${code==='de' ? renderConjugationCard('de', conf.accent) : ''}
+
+    <div class="card">
+      <h2>Aggiungi una parola</h2>
+      <div style="margin-bottom:14px;">
+        <button class="btn btn-ghost" data-action="seed-words">Carica le 100 parole di base</button>
+      </div>
+      <form class="form-row" data-form="add-word">
+        <div class="field grow">
+          <label>Termine (${conf.name})</label>
+          <input name="term" required ${conf.rtl?'dir="rtl" style="text-align:right;font-family:\'Noto Naskh Arabic\',serif;font-size:16px;"':''}>
+        </div>
+        <div class="field grow">
+          <label>Traduzione in italiano</label>
+          <input name="translation" required>
+        </div>
+        <div class="field">
+          <label>Famiglia</label>
+          <select name="family" required>
+            ${FAMILIES.map(f=>`<option value="${f.id}">${f.label}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field grow">
+          <label>Nota (opzionale)</label>
+          <input name="note" placeholder="es. genere, coniugazione, uso...">
+        </div>
+        <button class="btn btn-primary" style="background:${conf.accent}">Aggiungi parola</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Vocabolario <span class="n">diviso per famiglia</span></h2>
+      ${familyBlocks || `<div class="empty-state">Non hai ancora aggiunto parole. Usa il modulo qui sopra per iniziare — ogni parola va inserita manualmente man mano che il tuo vocabolario prende forma.</div>`}
+    </div>
+
+    <div class="card">
+      <h2>Regole grammaticali</h2>
+      <div style="margin-bottom:14px;">
+        <button class="btn btn-ghost" data-action="seed-grammar">Carica le 10 regole di base</button>
+      </div>
+      <form class="form-row" data-form="add-grammar" style="margin-bottom:16px;">
+        <div class="field grow">
+          <label>Titolo della regola</label>
+          <input name="title" required placeholder="es. Costrutto idafa">
+        </div>
+        <div class="field" style="flex:1 1 100%;">
+          <label>Spiegazione</label>
+          <textarea name="content" required placeholder="Descrivi la regola con esempi..."></textarea>
+        </div>
+        <button class="btn btn-primary" style="background:${conf.accent}">Aggiungi regola</button>
+      </form>
+      ${data.grammar.length===0 ? `<div class="empty-state">Nessuna regola grammaticale ancora salvata.</div>` :
+        data.grammar.map(g=>`
+          <div class="grammar-item ${conf.rtl?'rtl':''}">
+            <button class="btn-danger del" data-del-grammar="${g.id}" title="Elimina" style="position:absolute;top:10px;right:10px;">✕</button>
+            <h4>${escapeHtml(g.title)}</h4>
+            <p>${escapeHtml(g.content)}</p>
+          </div>`).join('')
+      }
+    </div>
+
+    <div class="card">
+      <h2>Sessione di studio</h2>
+      ${timer.running && timer.code===code ? `
+        <div class="timer-box">
+          <div>
+            <div class="timer-display mono" id="timer-display">00:00:00</div>
+            <div class="timer-status">In corso · cliente: ${escapeHtml(timer.client)} · € ${timer.rate}/h</div>
+          </div>
+          <button class="btn btn-primary" style="background:#B23A2E" data-action="stop-timer">Ferma sessione</button>
+        </div>
+      ` : `
+        <form class="form-row" data-form="start-timer">
+          <div class="field">
+            <label>Nome cliente</label>
+            <input name="client" placeholder="Studio personale">
+          </div>
+          <div class="field">
+            <label>Tariffa oraria (€)</label>
+            <input name="rate" type="number" min="0" step="0.5" placeholder="0">
+          </div>
+          <div class="field">
+            <label>Lingua</label>
+            <input value="${conf.name}" disabled style="color:var(--text-faint);min-width:120px;">
+          </div>
+          <button class="btn btn-primary" style="background:${conf.accent}" ${timer.running?'disabled title="Un timer è già in corso su un\'altra lingua"':''}>
+            Avvia timer
+          </button>
+        </form>
+        ${timer.running ? `<div class="timer-status" style="margin-top:8px;">Timer in corso per ${LANGS[timer.code].name} — fermalo prima di avviarne uno nuovo.</div>` : ''}
+      `}
+
+      <h2 style="margin-top:24px;">Cronologia sessioni</h2>
+      ${sessions.length===0 ? `<div class="empty-state">Nessuna sessione registrata ancora.</div>` : `
+        <table class="sessions">
+          <thead><tr><th>Data</th><th>Cliente</th><th>Tariffa</th><th>Durata</th><th>Valore</th></tr></thead>
+          <tbody>
+            ${sessions.map(s=>`
+              <tr>
+                <td>${new Date(s.date).toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'})}</td>
+                <td>${escapeHtml(s.client)}</td>
+                <td class="num">€ ${s.rate.toFixed(2)}/h</td>
+                <td class="num">${fmtDuration(s.durationSec)}</td>
+                <td class="num">€ ${((s.durationSec/3600)*s.rate).toFixed(2)}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>`}
+    </div>
+  `;
+
+  // events
+  page.querySelector('[data-form="add-word"]').addEventListener('submit', async e=>{
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    data.words.push({id:uid(), term:fd.get('term').trim(), translation:fd.get('translation').trim(), family:fd.get('family'), note:(fd.get('note')||'').trim(), date:new Date().toISOString()});
+    await saveKey('lang:'+code, data);
+    renderLangPage(code);
+  });
+  page.querySelector('[data-form="add-grammar"]').addEventListener('submit', async e=>{
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    data.grammar.unshift({id:uid(), title:fd.get('title').trim(), content:fd.get('content').trim(), date:new Date().toISOString()});
+    await saveKey('lang:'+code, data);
+    renderLangPage(code);
+  });
+  const timerForm = page.querySelector('[data-form="start-timer"]');
+  if(timerForm){
+    timerForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      startTimer(code, fd.get('client'), fd.get('rate'));
+      renderLangPage(code);
+    });
+  }
+  const stopBtn = page.querySelector('[data-action="stop-timer"]');
+  if(stopBtn) stopBtn.addEventListener('click', stopTimer);
+
+  const seedWordsBtn = page.querySelector('[data-action="seed-words"]');
+  if(seedWordsBtn) seedWordsBtn.addEventListener('click', async ()=>{
+    seedWordsBtn.disabled = true; seedWordsBtn.textContent = 'Carico…';
+    const added = await seedWords(code);
+    renderLangPage(code);
+  });
+  const seedGrammarBtn = page.querySelector('[data-action="seed-grammar"]');
+  if(seedGrammarBtn) seedGrammarBtn.addEventListener('click', async ()=>{
+    seedGrammarBtn.disabled = true; seedGrammarBtn.textContent = 'Carico…';
+    const added = await seedGrammar(code);
+    renderLangPage(code);
+  });
+
+  page.querySelectorAll('[data-del-word]').forEach(b=>b.addEventListener('click', async ()=>{
+    data.words = data.words.filter(w=>w.id!==b.dataset.delWord);
+    await saveKey('lang:'+code, data);
+    renderLangPage(code);
+  }));
+  page.querySelectorAll('[data-del-grammar]').forEach(b=>b.addEventListener('click', async ()=>{
+    data.grammar = data.grammar.filter(g=>g.id!==b.dataset.delGrammar);
+    await saveKey('lang:'+code, data);
+    renderLangPage(code);
+  }));
+
+  page.querySelectorAll('[data-speak]').forEach(b=>b.addEventListener('click', ()=>{
+    speakWord(b.dataset.speak, b.dataset.speakLang);
+  }));
+}
+
+/* ---------------------------------------------------------------
+   SPANISH — false friends table
+--------------------------------------------------------------- */
+async function renderSpanish(){
+  const page = document.getElementById('page');
+  page.innerHTML = `<div class="empty-state">Caricamento…</div>`;
+  await ensureFFLoaded();
+  const list = cache.ff;
+
+  page.innerHTML = `
+    <div class="page-head">
+      <span class="glyph-big" style="background:${LANGS.es.accent}">${LANGS.es.glyph}</span>
+      <h1>${LANGS.es.name}</h1>
+      <p>Solo i "falsos amigos": parole spagnole che assomigliano all'italiano ma hanno un significato diverso.</p>
+    </div>
+
+    <div class="card">
+      <h2>Aggiungi un falso amico</h2>
+      <div style="margin-bottom:14px;">
+        <button class="btn btn-ghost" data-action="seed-ff">Carica 30 falsi amici di base</button>
+      </div>
+      <form class="form-row" data-form="add-ff">
+        <div class="field grow"><label>Parola spagnola</label><input name="es" required></div>
+        <div class="field grow"><label>Traduzione italiana reale</label><input name="it" required></div>
+        <button class="btn btn-primary" style="background:${LANGS.es.accent}">Aggiungi</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Tabella dei falsi amici <span class="n">${list.length} coppie</span></h2>
+      ${list.length===0 ? `<div class="empty-state">Nessun falso amico ancora catalogato. Aggiungine uno qui sopra, o carica quelli di base.</div>` : `
+      <div class="ff-wrap">
+        <table class="ff">
+          <tr><th>Spagnolo</th>${list.map(f=>`<td>${escapeHtml(f.es)}</td>`).join('')}</tr>
+          <tr><th>Italiano</th>${list.map(f=>`<td>${escapeHtml(f.it)}</td>`).join('')}</tr>
+          <tr class="actions"><th></th>${list.map(f=>`<td><button class="btn-danger" data-del-ff="${f.id}">✕ elimina</button></td>`).join('')}</tr>
+        </table>
+      </div>`}
+    </div>
+
+    ${renderConjugationCard('es', LANGS.es.accent)}
+  `;
+
+  const seedFfBtn = page.querySelector('[data-action="seed-ff"]');
+  if(seedFfBtn) seedFfBtn.addEventListener('click', async ()=>{
+    seedFfBtn.disabled = true; seedFfBtn.textContent = 'Carico…';
+    const existing = new Set(list.map(f=>f.es));
+    SEED_FALSE_FRIENDS.forEach(([es,it])=>{
+      if(!existing.has(es)){
+        list.push({id:uid(), es, it});
+        existing.add(es);
+      }
+    });
+    await saveKey('spanish:false-friends', list);
+    renderSpanish();
+  });
+
+  page.querySelector('[data-form="add-ff"]').addEventListener('submit', async e=>{
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    list.push({id:uid(), es:fd.get('es').trim(), it:fd.get('it').trim()});
+    await saveKey('spanish:false-friends', list);
+    renderSpanish();
+  });
+  page.querySelectorAll('[data-del-ff]').forEach(b=>b.addEventListener('click', async ()=>{
+    cache.ff = list.filter(f=>f.id!==b.dataset.delFf);
+    await saveKey('spanish:false-friends', cache.ff);
+    renderSpanish();
+  }));
+}
+
+/* ---------------------------------------------------------------
+   FRENCH — speech-to-text + photo OCR (via Claude API)
+--------------------------------------------------------------- */
+let recognition = null;
+let recognizing = false;
+let liveTranscript = '';
+let finalChunks = [];
+
+async function renderFrench(){
+  const page = document.getElementById('page');
+  page.innerHTML = `<div class="empty-state">Caricamento…</div>`;
+  await ensureFrLoaded();
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  page.innerHTML = `
+    <div class="page-head">
+      <span class="glyph-big" style="background:${LANGS.fr.accent}">${LANGS.fr.glyph}</span>
+      <h1>${LANGS.fr.name}</h1>
+      <p>Hai già un buon vocabolario: qui puoi registrare la tua voce o fotografare un testo e trasformarli in testo scritto.</p>
+    </div>
+
+    <div class="card">
+      <h2>Registrazione vocale</h2>
+      ${SR ? `
+        <button class="rec-btn" id="rec-btn" style="background:${LANGS.fr.accent}">
+          <span class="rec-dot" id="rec-dot"></span>
+          <span id="rec-label">Avvia registrazione</span>
+        </button>
+        <div class="transcript-box" id="live-transcript">La trascrizione apparirà qui mentre parli...</div>
+        <div style="margin-top:10px;">
+          <button class="btn" id="save-transcript" disabled>Salva trascrizione</button>
+        </div>
+      ` : `<div class="empty-state">Il tuo browser non supporta il riconoscimento vocale. Prova con Google Chrome su desktop o Android.</div>`}
+
+      <h2 style="margin-top:22px;">Trascrizioni vocali salvate</h2>
+      <div class="record-history">
+        ${cache.frAudio.length===0 ? `<div class="empty-state">Nessuna registrazione salvata ancora.</div>` :
+          cache.frAudio.map(t=>`
+            <div class="item">
+              <div class="date">${new Date(t.date).toLocaleString('it-IT')} <button class="btn-danger" data-del-audio="${t.id}" style="float:right;">✕ elimina</button></div>
+              <div>${escapeHtml(t.text)}</div>
+            </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Foto di un testo</h2>
+      <label class="photo-drop" for="photo-input">
+        Tocca per scattare o caricare una foto di un testo in francese — il testo verrà trascritto automaticamente.
+      </label>
+      <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none;">
+      <div class="transcript-box" id="photo-transcript" style="display:none;"></div>
+      <div style="margin-top:10px;">
+        <button class="btn" id="save-photo" style="display:none;">Salva trascrizione</button>
+      </div>
+
+      <h2 style="margin-top:22px;">Trascrizioni da foto salvate</h2>
+      <div class="record-history">
+        ${cache.frPhoto.length===0 ? `<div class="empty-state">Nessuna trascrizione da foto salvata ancora.</div>` :
+          cache.frPhoto.map(t=>`
+            <div class="item">
+              <div class="date">${new Date(t.date).toLocaleString('it-IT')} <button class="btn-danger" data-del-photo="${t.id}" style="float:right;">✕ elimina</button></div>
+              <div>${escapeHtml(t.text)}</div>
+            </div>`).join('')}
+      </div>
+    </div>
+
+    ${renderConjugationCard('fr', LANGS.fr.accent)}
+  `;
+
+  // delete handlers
+  page.querySelectorAll('[data-del-audio]').forEach(b=>b.addEventListener('click', async ()=>{
+    cache.frAudio = cache.frAudio.filter(t=>t.id!==b.dataset.delAudio);
+    await saveKey('french:audio', cache.frAudio);
+    renderFrench();
+  }));
+  page.querySelectorAll('[data-del-photo]').forEach(b=>b.addEventListener('click', async ()=>{
+    cache.frPhoto = cache.frPhoto.filter(t=>t.id!==b.dataset.delPhoto);
+    await saveKey('french:photo', cache.frPhoto);
+    renderFrench();
+  }));
+
+  // speech recognition
+  if(SR){
+    const recBtn = document.getElementById('rec-btn');
+    const recDot = document.getElementById('rec-dot');
+    const recLabel = document.getElementById('rec-label');
+    const liveBox = document.getElementById('live-transcript');
+    const saveBtn = document.getElementById('save-transcript');
+
+    recBtn.addEventListener('click', ()=>{
+      if(!recognizing){
+        recognition = new SR();
+        recognition.lang = 'fr-FR';
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        liveTranscript = '';
+        finalChunks = [];
+        recognition.onresult = (ev)=>{
+          let interim = '';
+          for(let i=0;i<ev.results.length;i++){
+            const r = ev.results[i];
+            if(r.isFinal) finalChunks[i] = r[0].transcript.trim();
+            else interim += r[0].transcript;
+          }
+          liveTranscript = finalChunks.filter(Boolean).join(' ');
+          liveBox.textContent = (liveTranscript + ' ' + interim).trim() || '...';
+          saveBtn.disabled = liveTranscript.trim().length===0;
+        };
+        recognition.onerror = ()=>{ stopRecording(); };
+        recognition.onend = ()=>{ if(recognizing) stopRecording(); };
+        recognition.start();
+        recognizing = true;
+        recDot.classList.add('on');
+        recLabel.textContent = 'Ferma registrazione';
+      } else {
+        stopRecording();
+      }
+    });
+    function stopRecording(){
+      recognizing = false;
+      recDot.classList.remove('on');
+      recLabel.textContent = 'Avvia registrazione';
+      if(recognition) recognition.stop();
+    }
+    saveBtn.addEventListener('click', async ()=>{
+      const text = liveTranscript.trim();
+      if(!text) return;
+      cache.frAudio.unshift({id:uid(), text, date:new Date().toISOString()});
+      await saveKey('french:audio', cache.frAudio);
+      liveTranscript = '';
+      renderFrench();
+    });
+  }
+
+  // photo OCR
+  const photoInput = document.getElementById('photo-input');
+  const photoTranscript = document.getElementById('photo-transcript');
+  const savePhotoBtn = document.getElementById('save-photo');
+  let currentPhotoText = '';
+
+  photoInput.addEventListener('change', async ()=>{
+    const file = photoInput.files[0];
+    if(!file) return;
+    photoTranscript.style.display = 'block';
+    photoTranscript.textContent = 'Lettura del testo in corso... 0%';
+    savePhotoBtn.style.display = 'none';
+    try{
+      const text = await transcribeImage(file, pct=>{
+        photoTranscript.textContent = 'Lettura del testo in corso... '+pct+'%';
+      });
+      currentPhotoText = text;
+      photoTranscript.textContent = text || '(nessun testo trovato — prova con una foto più nitida e ben illuminata)';
+      savePhotoBtn.style.display = text ? 'inline-block' : 'none';
+    }catch(err){
+      photoTranscript.textContent = 'Non è stato possibile leggere il testo. Riprova con un\'altra foto.';
+      console.error(err);
+    }
+  });
+  savePhotoBtn.addEventListener('click', async ()=>{
+    if(!currentPhotoText) return;
+    cache.frPhoto.unshift({id:uid(), text:currentPhotoText, date:new Date().toISOString()});
+    await saveKey('french:photo', cache.frPhoto);
+    renderFrench();
+  });
+}
+
+let ocrWorker = null;
+async function transcribeImage(file, onProgress){
+  if(typeof Tesseract === 'undefined'){
+    throw new Error('Libreria OCR non caricata. Controlla la connessione e ricarica la pagina.');
+  }
+  if(!ocrWorker){
+    ocrWorker = await Tesseract.createWorker('fra', 1, {
+      logger: m=>{
+        if(onProgress && m.status==='recognizing text') onProgress(Math.round((m.progress||0)*100));
+      }
+    });
+  }
+  const { data } = await ocrWorker.recognize(file);
+  return (data.text||'').trim();
+}
+
+/* ---------------------------------------------------------------
+   UTIL
+--------------------------------------------------------------- */
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* ---------------------------------------------------------------
+   AUTENTICAZIONE — stesso account su tutti i dispositivi
+--------------------------------------------------------------- */
+function renderLogin(prefillEmail, errorMsg){
+  app.innerHTML = `
+    <div class="login-wrap">
+      <div class="login-card">
+        <h1>Palestra delle Lingue</h1>
+        <p>Accedi con la stessa email e password su ogni dispositivo per ritrovare sempre le stesse parole e sessioni.</p>
+        <form id="login-form">
+          <div class="field"><label>Email</label><input type="email" name="email" required value="${prefillEmail||''}"></div>
+          <div class="field"><label>Password</label><input type="password" name="password" required minlength="6"></div>
+          <button class="btn btn-primary" style="background:var(--ink)" type="submit" id="login-btn">Accedi</button>
+          <button class="btn btn-ghost" type="button" id="signup-btn" style="margin-top:8px;">Non ho un account: registrami</button>
+        </form>
+        <div class="login-error" id="login-error">${errorMsg||''}</div>
+      </div>
+    </div>`;
+  const form = document.getElementById('login-form');
+  const errorBox = document.getElementById('login-error');
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const fd = new FormData(form);
+    errorBox.textContent = 'Accesso in corso…';
+    const { error } = await supabaseClient.auth.signInWithPassword({ email: fd.get('email'), password: fd.get('password') });
+    if(error) errorBox.textContent = 'Accesso non riuscito: '+error.message;
+  });
+  document.getElementById('signup-btn').addEventListener('click', async ()=>{
+    const fd = new FormData(form);
+    if(!fd.get('email') || !fd.get('password')){ errorBox.textContent = 'Inserisci email e password, poi premi di nuovo.'; return; }
+    errorBox.textContent = 'Registrazione in corso…';
+    const { error } = await supabaseClient.auth.signUp({ email: fd.get('email'), password: fd.get('password') });
+    if(error){ errorBox.textContent = 'Registrazione non riuscita: '+error.message; return; }
+    errorBox.textContent = 'Account creato! Se richiesto, controlla la tua email per confermare, poi accedi.';
+  });
+}
+
+let appStarted = false;
+async function initAuthAndApp(){
+  const { data:{ session } } = await supabaseClient.auth.getSession();
+  if(session){ startApp(); appStarted = true; } else renderLogin();
+  supabaseClient.auth.onAuthStateChange((event, session)=>{
+    if(event==='SIGNED_IN'){
+      if(!appStarted){ startApp(); appStarted = true; }
+    }
+    if(event==='SIGNED_OUT'){
+      appStarted = false;
+      cache.lang = {}; cache.sessions = {}; cache.ff = null; cache.frAudio = null; cache.frPhoto = null; cache.photo = {};
+      renderLogin();
+    }
+  });
+}
+function startApp(){
+  shell();
+  renderHome();
+}
+
+/* ---------------------------------------------------------------
+   INIT
+--------------------------------------------------------------- */
+initAuthAndApp();
 </script>
 </body>
 </html>
