@@ -132,9 +132,6 @@
   .btn-danger:hover{color:#B23A2E;background:transparent;}
   .btn-ghost{background:transparent;border:1px solid var(--hairline);}
 
-  /* Stile per il pulsante "Torna alla Scrivania" */
-  .back-btn:hover { background: #333849 !important; }
-
   .family-group{margin-bottom:18px;}
   .family-group h3{
     font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);
@@ -993,19 +990,12 @@ const app = document.getElementById('app');
 
 function shell(){
   app.innerHTML = `
-    <button class="btn back-btn" id="back-btn" style="display:none; position:fixed; top:16px; right:16px; z-index:100; background:var(--ink); color:#fff; border:none; box-shadow:0 4px 12px rgba(0,0,0,.2);">← Torna alla Scrivania</button>
     <div class="sidebar" id="sidebar"></div>
     <div class="main">
       <div class="accent-bar" id="accent-bar" style="background:${currentView==='home'?'var(--ink)':(LANGS[currentView]?.accent||'var(--ink)')}"></div>
       <div class="page" id="page"></div>
     </div>`;
   renderSidebar();
-
-  // Aggiungi l'evento per il pulsante "Torna alla Scrivania"
-  const backBtn = document.getElementById('back-btn');
-  if(backBtn) {
-    backBtn.addEventListener('click', ()=> navigateTo('home'));
-  }
 }
 
 function renderSidebar(){
@@ -1052,11 +1042,6 @@ function renderSidebar(){
 
 async function navigateTo(view){
   currentView = view;
-
-  // Mostra o nascondi il pulsante "Torna alla Scrivania"
-  const backBtn = document.getElementById('back-btn');
-  if(backBtn) backBtn.style.display = view==='home' ? 'none' : 'inline-block';
-
   const bar = document.getElementById('accent-bar');
   if(bar) bar.style.background = view==='home' ? 'var(--ink)' : (LANGS[view]?.accent || 'var(--ink)');
   renderSidebar();
@@ -1186,16 +1171,15 @@ async function renderLangPage(code){
       </div>
     </div>
 
-    ${code!=='zh' ? `
     <div class="card">
-      <h2>Pratica di scrittura <span class="n">traccia ogni lettera seguendo il tratteggio</span></h2>
+      <h2>Pratica di scrittura <span class="n">traccia ogni ${code==='zh'?'suono':'lettera'} seguendo il tratteggio</span></h2>
       <div class="empty-state" style="background:#F7F4EC;border-radius:10px;padding:12px 14px;margin-bottom:14px;color:var(--text);">
         La freccia colorata sovrapposta a ogni carattere indica la direzione generale del tratto; il testo sotto spiega come si costruisce la lettera nel dettaglio. Ricalca la forma tratteggiata su carta, seguendo le righe/quadretti guida.
       </div>
       <div class="trace-grid">
         ${ALPHABETS[code].map((entry,idx)=>tracingTile(entry, code, conf.accent, idx, 'new')).join('')}
       </div>
-    </div>` : ''}
+    </div>
 
     ${code==='zh' ? `
     <div class="card">
