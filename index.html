@@ -132,9 +132,6 @@
   .btn-danger:hover{color:#B23A2E;background:transparent;}
   .btn-ghost{background:transparent;border:1px solid var(--hairline);}
 
-  /* Stile per il pulsante "Torna alla Scrivania" */
-  .back-btn:hover { background: #333849 !important; }
-
   .family-group{margin-bottom:18px;}
   .family-group h3{
     font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);
@@ -286,30 +283,101 @@ const FAMILIES = [
 ];
 
 /* ---------------------------------------------------------------
-   SEED WORDS, GRAMMAR, NOTEBOOK, ETC (DAI DATI PRECEDENTI)
+   SEED CONTENT
 --------------------------------------------------------------- */
-const SEED_WORDS = { /* MANTIENI I TUOI DATI */ };
-const SEED_GRAMMAR = { /* MANTIENI I TUOI DATI */ };
-const NOTEBOOK_INFO = { /* MANTIENI I TUOI DATI */ };
-const SPEECH_LANG = { ar:'ar-SA', zh:'zh-CN', el:'el-GR', de:'de-DE', es:'es-ES', fr:'fr-FR' };
-
-// ... (Tutte le altre funzioni di sintesi, direzioni e tracciamento base restano invariate) ...
+const SEED_WORDS = { /* ... (Mantieni i tuoi dati originali da qui in poi) ... */ };
 
 /* ---------------------------------------------------------------
-   GUIDED TRACE SETUP (NUOVA GUIDA DIDATTICA)
+   GUIDED TRACE (Guida Didattica per bambini)
+   Numeri, frecce e ordine dei tratti per i primi caratteri.
+   Se un carattere non è presente, usa la freccia generica.
 --------------------------------------------------------------- */
 const GUIDED_TRACE = {
   zh: {
-    "人": [ { path: "M60,20 L45,90", x: 60, y: 20, num: 1 }, { path: "M60,20 L75,90", x: 60, y: 20, num: 2 } ],
-    "日": [ { path: "M40,30 L80,30", x: 40, y: 30, num: 1 }, { path: "M40,30 L40,90", x: 40, y: 30, num: 2 }, { path: "M80,30 L80,90", x: 80, y: 30, num: 3 }, { path: "M40,90 L80,90", x: 40, y: 90, num: 4 } ]
+    "人": [
+      { path: "M60,20 L45,90", x: 60, y: 20, num: 1 },
+      { path: "M60,20 L75,90", x: 60, y: 20, num: 2 }
+    ],
+    "日": [
+      { path: "M40,30 L80,30", x: 40, y: 30, num: 1 },
+      { path: "M40,30 L40,90", x: 40, y: 30, num: 2 },
+      { path: "M80,30 L80,90", x: 80, y: 30, num: 3 },
+      { path: "M40,90 L80,90", x: 40, y: 90, num: 4 }
+    ],
+    "口": [
+      { path: "M35,30 L85,30", x: 35, y: 30, num: 1 },
+      { path: "M35,30 L35,90", x: 35, y: 30, num: 2 },
+      { path: "M35,90 L85,90", x: 35, y: 90, num: 3 },
+      { path: "M85,90 L85,30", x: 85, y: 90, num: 4 }
+    ]
   },
   el: {
-    "Α": [ { path: "M50,90 L40,20", x: 50, y: 90, num: 1 }, { path: "M40,20 L70,90", x: 40, y: 20, num: 2 }, { path: "M38,50 L62,50", x: 38, y: 50, num: 3 } ]
+    "Α": [
+      { path: "M55,90 L45,20", x: 55, y: 90, num: 1 },
+      { path: "M45,20 L70,90", x: 45, y: 20, num: 2 },
+      { path: "M45,50 L65,50", x: 45, y: 50, num: 3 }
+    ],
+    "Β": [
+      { path: "M40,20 L40,90", x: 40, y: 20, num: 1 },
+      { path: "M40,20 L70,20", x: 40, y: 20, num: 2 },
+      { path: "M70,20 L70,50", x: 70, y: 20, num: 3 },
+      { path: "M40,50 L70,50", x: 40, y: 50, num: 4 },
+      { path: "M70,50 L70,90", x: 70, y: 50, num: 5 },
+      { path: "M40,90 L70,90", x: 40, y: 90, num: 6 }
+    ]
   },
   ar: {
-    "ب": [ { path: "M30,70 L70,70", x: 30, y: 70, num: 1 }, { path: "M50,70 L50,30", x: 50, y: 70, num: 2 } ]
+    "ب": [
+      { path: "M40,70 L80,70", x: 40, y: 70, num: 1 },
+      { path: "M60,70 L60,30", x: 60, y: 70, num: 2 }
+    ],
+    "ت": [
+      { path: "M40,70 L80,70", x: 40, y: 70, num: 1 },
+      { path: "M60,70 L60,30", x: 60, y: 70, num: 2 }
+    ]
   }
 };
+
+/* ---------------------------------------------------------------
+   NUOVA FUNZIONE TRACING TILE
+--------------------------------------------------------------- */
+const TRACE_FONT = { ar:"'Noto Naskh Arabic',serif", zh:"'Noto Serif SC',serif", el:"'Noto Serif',serif", de:"'Fraunces',serif" };
+const TRACE_DASH_NEW = '#C0392B';
+const TRACE_DASH_LEGACY = '#9C9384';
+
+function directionArrow(howto){
+  const h = (howto||'').toLowerCase();
+  if(h.includes('antiorario')) return 'ccw';
+  if(h.includes('orario')) return 'cw';
+  if(h.includes('destra a sinistra')) return 'left';
+  if(h.includes('sinistra a destra')) return 'right';
+  if(h.includes("dall'alto") || h.includes('verso il basso') || h.includes('scende')) return 'down';
+  if(h.includes("verso l'alto") || h.includes('sale')) return 'up';
+  return 'right';
+}
+function arrowPathFor(dir){
+  switch(dir){
+    case 'left':  return 'M90,61 L30,61';
+    case 'right': return 'M30,61 L90,61';
+    case 'up':    return 'M60,92 L60,28';
+    case 'down':  return 'M60,28 L60,92';
+    case 'ccw':   return 'M88,61 A28,28 0 1 0 61,89';
+    case 'cw':    return 'M32,61 A28,28 0 1 1 59,89';
+    default:      return 'M30,61 L90,61';
+  }
+}
+function arrowGeometryInside(dir, textY){
+  const top=textY-46, bottom=textY-4, mid=textY-25, left=36, right=84, cx=60;
+  switch(dir){
+    case 'left':  return { d:`M${right},${mid} L${left},${mid}`, sx:right, sy:mid };
+    case 'right': return { d:`M${left},${mid} L${right},${mid}`, sx:left, sy:mid };
+    case 'up':    return { d:`M${cx},${bottom} L${cx},${top}`, sx:cx, sy:bottom };
+    case 'down':  return { d:`M${cx},${top} L${cx},${bottom}`, sx:cx, sy:top };
+    case 'ccw':   return { d:`M${right-4},${mid} A20,20 0 1 0 ${cx},${mid+20}`, sx:right-4, sy:mid };
+    case 'cw':    return { d:`M${left+4},${mid} A20,20 0 1 1 ${cx},${mid+20}`, sx:left+4, sy:mid };
+    default:      return { d:`M${left},${mid} L${right},${mid}`, sx:left, sy:mid };
+  }
+}
 
 function tracingTile(entry, code, accent, idx, style){
   style = style || 'new';
@@ -329,12 +397,17 @@ function tracingTile(entry, code, accent, idx, style){
   const strokes = GUIDED_TRACE[code] && GUIDED_TRACE[code][ch];
 
   if (strokes && strokes.length > 0) {
+    dashColor = TRACE_DASH_NEW;
     arrowSvg = strokes.map(s => `
       <path d="${s.path}" fill="none" stroke="${accent}" stroke-width="3.5" stroke-linecap="round" marker-end="url(#${markerId})"/>
       <circle cx="${s.x}" cy="${s.y}" r="7.5" fill="#fff" stroke="${accent}" stroke-width="1.5"/>
       <text x="${s.x}" y="${s.y+3.2}" text-anchor="middle" font-size="9.5" font-weight="700" fill="${accent}" font-family="'Inter',sans-serif">${s.num}</text>
     `).join('');
-    dashColor = TRACE_DASH_NEW;
+  } else if (style==='legacy'){
+    dashColor = TRACE_DASH_LEGACY;
+    const arrowDir = directionArrow(howto);
+    const arrowD = arrowPathFor(arrowDir);
+    arrowSvg = `<path d="${arrowD}" fill="none" stroke="${accent}" stroke-width="3.5" stroke-linecap="round" opacity="0.8" marker-end="url(#${markerId})"/>`;
   } else {
     dashColor = TRACE_DASH_NEW;
     const arrowDir = directionArrow(howto);
@@ -365,10 +438,8 @@ function tracingTile(entry, code, accent, idx, style){
     </div>`;
 }
 
-// ... (RESTANTE LOGICA APP: ROUTER, SHELL, HOME, LANGPAGE, SPANISH, FRENCH, LOGIN, INIT) ...
-// Assicurati di incollare qui tutto il resto del codice dal tuo file precedente.
+/* (INSERISCI QUI TUTTI I TUOI DATI E FUNZIONI ORIGINALI: RADICALI, PICTOGRAMS, ALPHABETS, SEED_GRAMMAR, ROUTER, LOGIN, ECC.) */
 
-initAuthAndApp();
 </script>
 </body>
 </html>
