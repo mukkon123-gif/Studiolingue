@@ -158,6 +158,7 @@
   .trace-cap{font-size:13px;font-weight:600;margin-top:2px;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;}
   .trace-cap .trace-name{font-weight:400;color:var(--text-muted);font-size:11px;}
   .trace-howto{font-size:10.5px;color:var(--text-faint);text-align:center;margin-top:4px;line-height:1.35; white-space:pre-wrap;}
+  .trace-translation{font-size:11px;color:var(--text-muted);text-align:center;margin-top:2px;font-weight:500;}
 
   .grammar-item{border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;margin-bottom:9px;position:relative;}
   .grammar-item h4{margin:0 0 4px 0;font-size:14px;font-family:'Fraunces',serif;font-weight:600;}
@@ -251,8 +252,7 @@
 
 <script>
 /* ---------------------------------------------------------------
-   SUPABASE CONFIG — incolla qui i tuoi valori da
-   Project Settings → API nel pannello di Supabase
+   SUPABASE CONFIG
 --------------------------------------------------------------- */
 const SUPABASE_URL = 'https://xtnsuakzdwzhprmhdnhb.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_KVxr6ltrIYSNk4eqvjA2fg_FraZzyOh';
@@ -282,11 +282,6 @@ const FAMILIES = [
   {id:'cortesia',      label:'Cortesia e Particelle'},
 ];
 
-/* ---------------------------------------------------------------
-   SEED CONTENT — 100 parole, 10 regole grammaticali e alfabeto
-   per ciascuna delle 4 lingue principali. Ogni voce parola è
-   [termine, traduzione italiana, famiglia, nota/traslitterazione]
---------------------------------------------------------------- */
 const SEED_WORDS = {
 ar:[
 ["أنا","io","pronomi","anā"],["أنتَ","tu","pronomi","anta"],["هو","lui","pronomi","huwa"],["هي","lei","pronomi","hiya"],["نحن","noi","pronomi","naḥnu"],["أنتم","voi","pronomi","antum"],["هم","loro","pronomi","hum"],["هذا","questo","pronomi","hādhā"],["ذلك","quello","pronomi","dhālika"],["لي","mio","pronomi","lī"],
@@ -530,9 +525,15 @@ function tracingTile(entry, code, accent, idx, style){
   // Formatta la descrizione in elenco numerato se contiene "1.", "2.", ecc.
   let howtoDisplay = escapeHtml(howto);
   if (howto.match(/\d\./)) {
-    // Sostituisce "1. ... 2. ..." con punti elenco numerati visivamente
     howtoDisplay = howtoDisplay.replace(/(\d+)\. /g, '<span style="font-weight:600;color:#C0392B;">$1.</span> ');
     howtoDisplay = howtoDisplay.replace(/\n/g, '<br>');
+  }
+
+  // Mostra la traduzione esplicitamente per i radicali e pittogrammi cinesi (stile 'legacy')
+  let translationHtml = '';
+  if (style === 'legacy' && code === 'zh') {
+    // Il terzo campo (sound) contiene già la traduzione/descrizione
+    translationHtml = `<div class="trace-translation">🇮🇹 ${escapeHtml(sound)}</div>`;
   }
 
   return `
@@ -551,6 +552,7 @@ function tracingTile(entry, code, accent, idx, style){
         <button class="speak-btn" data-speak="${escapeHtml(ch)}" data-speak-lang="${code}" title="Ascolta">🔊</button>
       </div>
       <div style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:2px;">${escapeHtml(sound)}</div>
+      ${translationHtml}
       <div class="trace-howto">${howtoDisplay}</div>
     </div>`;
 }
